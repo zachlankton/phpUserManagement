@@ -17,6 +17,9 @@
 			break;
 		case "/getuser":
 			require "../routes/getuser.php";
+			break;
 	}
+
+	header("Location: /404.html");
 
 ?>
