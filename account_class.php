@@ -57,6 +57,16 @@ class Account
 		return $this->super;
 	}
 	
+	public function getUser():
+	{
+		return array(
+			"id" => $this->id,
+			"name" => $this->name,
+			"isSuper" => $this->super,
+			"isAuthenticated" => $this->authenticated
+		);
+	}
+	
 	/* Add a new account to the system and return its ID (the account_id column of the accounts table) */
 	public function addAccount(string $name, string $passwd): int
 	{
