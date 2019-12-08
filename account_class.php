@@ -1,20 +1,5 @@
 <?php
 
-/*
- * 	This class file can be downloaded from Alex Web Develop "PHP Login and Authentication Tutorial":
- * 	
- * 	https://alexwebdevelop.com/user-authentication/
- * 	
- * 	You are free to use and share this script as you like.
- * 	If you want to share it, please leave this disclaimer inside.
- * 	
- * 	Subscribe to my free newsletter and get my exclusive PHP tips and learning advice:
- * 	
- * 	https://alexwebdevelop.com/
- * 	
-*/
-
-
 class Account
 {
 	/* Class properties (variables) */
