@@ -40,6 +40,7 @@ class Account
 		$this->id = NULL;
 		$this->name = NULL;
 		$this->authenticated = FALSE;
+		$this->super = FALSE;
 	}
 	
 	/* Destructor */
@@ -175,8 +176,8 @@ class Account
 		}
 	}
 	
-	/* Edit an account (selected by its ID). The name, the password and the status (enabled/disabled) can be changed */
-	public function editAccount(int $id, string $name, string $passwd, bool $enabled)
+	/* Edit an account (selected by its ID). The password, isSuper and the status (enabled/disabled) can be changed */
+	public function editAccount(int $id, string $passwd, bool $enabled, bool $super)
 	{
 		/* Global $pdo object */
 		global $pdo;
@@ -214,16 +215,17 @@ class Account
 		/* Finally, edit the account */
 		
 		/* Edit query template */
-		$query = 'UPDATE accounts SET account_name = :name, account_passwd = :passwd, account_enabled = :enabled WHERE account_id = :id';
+		$query = 'UPDATE accounts SET account_passwd = :passwd, account_enabled = :enabled, super_user = :super WHERE account_id = :id';
 		
 		/* Password hash */
 		$hash = password_hash($passwd, PASSWORD_DEFAULT);
 		
 		/* Int value for the $enabled variable (0 = false, 1 = true) */
 		$intEnabled = $enabled ? 1 : 0;
+		$intSuper = $super ? 1 : 0;
 		
 		/* Values array for PDO */
-		$values = array(':name' => $name, ':passwd' => $hash, ':enabled' => $intEnabled, ':id' => $id);
+		$values = array( ':passwd' => $hash, ':enabled' => $intEnabled, ':super' => $intSuper, ':id' => $id);
 		
 		/* Execute the query */
 		try
@@ -311,7 +313,7 @@ class Account
 		/* Example check: the length must be between 8 and 16 chars */
 		$len = mb_strlen($name);
 		
-		if (($len < 8) || ($len > 16))
+		if (($len < 4) || ($len > 16))
 		{
 			$valid = FALSE;
 		}
