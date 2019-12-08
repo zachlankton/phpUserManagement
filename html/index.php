@@ -67,14 +67,14 @@
 	// IF REQUEST IS FOR '/login' then attempt login
 	if ($uri == '/login'){
 		
-		// If there is already a user logged in... logout first.
-		if ($login){
-			$account->logout();
-		}
-		
 		// if no user is set in POST request then forward user to login page
 		if (!isset($_POST['user'])){
 			header("Location: /login.html");
+		}
+		
+		// If there is already a user logged in... logout first.
+		if ($login){
+			$account->logout();
 		}
 		
 		// get POST vars
@@ -104,9 +104,11 @@
 
 
 	// IF USER IS AUTHENTICATED AND REQUESTING LOGOUT
-	if ($uri == '/logout'){
+	if ($uri == '/logout' && $login){
 		$account->logout();
-		$login = $account->sessionLogin();
+		$login = FALSE;
+		echo "Successfully Logged Out!";
+		die();
 	}
 
 
