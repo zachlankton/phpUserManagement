@@ -57,7 +57,7 @@ class Account
 		return $this->super;
 	}
 	
-	public function getUser():
+	public function getUser()
 	{
 		return array(
 			"id" => $this->id,
