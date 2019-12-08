@@ -1,6 +1,5 @@
 <?php
-
-	echo 'Authentication successful.';
-        echo 'Account ID: ' . $account->getId() . '<br>';
-        echo 'Account name: ' . $account->getName() . '<br>';
+	global $account;
+	header('Content-Type: application/json');
+	echo json_encode($account);
 ?>
