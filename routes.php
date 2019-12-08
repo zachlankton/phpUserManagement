@@ -11,13 +11,13 @@
 	switch ($uri) {
 		case "/asdf":
 			require "../routes/asdf.php";
-			break;
+			die();
 		case "/adduser":
 			require "../routes/adduser.php";
-			break;
+			die();
 		case "/getuser":
 			require "../routes/getuser.php";
-			break;
+			die();
 	}
 
 	header("Location: /404.html");
