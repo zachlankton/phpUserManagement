@@ -86,9 +86,9 @@
 		{
 			// LOGIN
 			$login = $account->login($user, $pw);
-
+			var_dump($login);
 			// IF LOGIN SUCCESSFUL FORWARD USER TO THE ORIGINAL REQUESTED URI
-			header("Location: ".$_SESSION['requested_uri']);
+			//header("Location: ".$_SESSION['requested_uri']);
 		}
 		catch (Exception $e)
 		{
