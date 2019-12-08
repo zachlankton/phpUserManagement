@@ -1,4 +1,38 @@
 <?php
+
+	/*
+		===================================
+		The purpose of this file is to require any requests that are not
+		publically available in the /var/www/html folder to be authenticated.
+		====================================
+		Authenticated Request will then be forwarded to the routes.php file
+		
+		DO NOT PLACE ANY FILE YOU DO NOT WANT PUBLIC IN THE
+		'/var/www/html' folder
+		
+		LIKEWISE... PLACE PROTECTED FILES/ROUTES IN THE
+		'/var/www/routes' folder
+		
+		==============================================
+		
+		nginx config is set to try all files/folders in the /var/www/html 
+		folder and if none exist then route to this file.
+		(   try_files $uri $uri/ /index.php ;   )
+		
+		This file will first check to see if the request is to
+		authenticate a user and attempt to do so.
+		
+		If it is not a login request it will check to see
+		if the session is already authenticated.
+		
+		It then checks if the request is for logout and will
+		logout accordingly if so.
+		
+		After all else, it will either forward the AUTHENTICATED USER
+		to the routes handler.
+		=====OR=====
+		It will forward the user to the login page.
+	*/
 	
 	// START SESSION
 	session_start();
@@ -65,11 +99,13 @@
 	}
 
 
-	// IF WE HAVE MADE IT THIS FAR THE USER IS AUTHENTICATED
-	// PASS USER ON TO ROUTE HANDLER
+	// IF WE HAVE MADE IT THIS FAR THE USER IS REQUESTING A RESOURCE
+	// THAT IS NOT '/login' OR 'logout'
+	
 
-	if ($login) // if login returned true -- meaning user was authenticated
+	if ($login) // if login returned true the user was successfully authenticated
 	{
+		// forward the request to the routes handler
 		require "../routes.php";
 	}
 	else
