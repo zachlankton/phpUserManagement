@@ -17,6 +17,8 @@
 			break;
 		case "/getuser":
 			require "../routes/getuser.php";
+		case "/pullLatest":
+			require "../routes/pullLatest.php";
 	}
 
 ?>
