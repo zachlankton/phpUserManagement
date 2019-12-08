@@ -128,7 +128,11 @@
 		if ($uri == "/login"){
 			echo "Invalid User and/or Password";
 		}else{
-			$_SESSION['requested_uri'] = $uri;
+			if ($uri != "/logout"){
+				$_SESSION['requested_uri'] = $uri;
+			}else{
+				$_SESSION['requested_uri'] = "/";
+			}
 			header("Location: /login.html");
 		}
 		
