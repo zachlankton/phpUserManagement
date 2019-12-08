@@ -86,9 +86,15 @@
 		{
 			// LOGIN
 			$login = $account->login($user, $pw);
-			var_dump($login);
-			// IF LOGIN SUCCESSFUL FORWARD USER TO THE ORIGINAL REQUESTED URI
-			//header("Location: ".$_SESSION['requested_uri']);
+			
+			if ($login){
+				// IF LOGIN SUCCESSFUL FORWARD USER TO THE ORIGINAL REQUESTED URI
+				header("Location: ".$_SESSION['requested_uri']);
+			}else{
+				echo "Invalid User and/or Password!";
+				die();
+			}
+			
 		}
 		catch (Exception $e)
 		{
@@ -114,8 +120,6 @@
 
 	// IF WE HAVE MADE IT THIS FAR THE USER IS REQUESTING A RESOURCE
 	// THAT IS NOT '/login' OR 'logout'
-	
-	var_dump($login);
 
 	if ($login) // if login returned true the user was successfully authenticated
 	{
@@ -126,16 +130,11 @@
 	{
 		// User is not Authenticated, capture this request URI and forward user
 		// to login page
-		if ($uri == "/login"){
-			echo "Invalid User and/or Password";
+		if ($uri != "/login" && $uri != "/logout"){
+			$_SESSION['requested_uri'] = $uri;
 		}else{
-			if ($uri != "/logout"){
-				$_SESSION['requested_uri'] = $uri;
-			}else{
-				$_SESSION['requested_uri'] = "/";
-			}
-			//header("Location: /login.html");
+			$_SESSION['requested_uri'] = "/";
 		}
-		
+		header("Location: /login.html");
 	}
 ?>
