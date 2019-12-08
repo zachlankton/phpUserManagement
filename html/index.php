@@ -49,8 +49,28 @@
 	/* Create a new Account object */
 	$account = new Account();
 
+
+
+	// CHECK IF USER IS AUTHENTICATED BEFORE PROCEEDING WITH THE REQUEST
+	try
+	{
+		$login = $account->sessionLogin();
+	}
+	catch (Exception $e)
+	{
+		echo $e->getMessage();
+		die();
+	}
+
+
+
 	// IF REQUEST IS FOR '/login' then attempt login
 	if ($uri == '/login'){
+		
+		// If there is already a user logged in... logout first.
+		if ($login){
+			$account->logout();
+		}
 		
 		// if no user is set in POST request then forward user to login page
 		if (!isset($_POST['user'])){
@@ -79,16 +99,7 @@
 	}
 
 
-	// CHECK IF USER IS AUTHENTICATED BEFORE PROCEEDING WITH THE REQUEST
-	try
-	{
-		$login = $account->sessionLogin();
-	}
-	catch (Exception $e)
-	{
-		echo $e->getMessage();
-		die();
-	}
+	
 
 
 
@@ -112,7 +123,12 @@
 	{
 		// User is not Authenticated, capture this request URI and forward user
 		// to login page
-		$_SESSION['requested_uri'] = $uri;
-		header("Location: /login.html");
+		if ($uri == "/login"){
+			echo "Invalid User and/or Password";
+		}else{
+			$_SESSION['requested_uri'] = $uri;
+			header("Location: /login.html");
+		}
+		
 	}
 ?>
