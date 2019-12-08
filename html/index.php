@@ -115,7 +115,7 @@
 	// IF WE HAVE MADE IT THIS FAR THE USER IS REQUESTING A RESOURCE
 	// THAT IS NOT '/login' OR 'logout'
 	
-	print_r($login);
+	var_dump($login);
 
 	if ($login) // if login returned true the user was successfully authenticated
 	{
