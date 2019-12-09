@@ -1,7 +1,11 @@
 <?php
   $req = $_SERVER['REQUEST_METHOD'];
-  $uri = substr($_SERVER['REQUEST_URI'], 6);
   
+  $uri = $_SERVER['REQUEST_URI'];
+  if (substr($uri, 0, 6) == "/couch"){
+    $uri = substr($_SERVER['REQUEST_URI'], 6);
+  }
+ 
   $data_string = file_get_contents('php://input');
 
   // create curl resource
