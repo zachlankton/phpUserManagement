@@ -17,21 +17,16 @@
 
 
 	// REGULAR USER ROUTES
-	switch ($uri) {
-		case "/asdf":
-			require "../routes/asdf.php";
-			die();
-		case "/couch":
-			require "../routes/couch.php";
-			die();
-		case "/getuser":
-			require "../routes/getuser.php";
-			die();
+	if ($uri == "/asdf") {
+		require "../routes/asdf.php";
+		die();
+	} elseif ( substr($uri, 0, 6) == "/couch" ) {
+		require "../routes/couch.php";
+		die();
+	} elseif ($uri == "/getuser") {
+		require "../routes/getuser.php";
+		die();
 	}
-
-
-
-	
 
 	header("Location: /404.html");
 
