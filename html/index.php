@@ -112,7 +112,7 @@
 
 
 	// IF USER IS AUTHENTICATED AND REQUESTING LOGOUT
-	if ($uri == '/logout' && $login){
+	if ($uri == '/logout'){
 		$account->logout();
 		$login = FALSE;
 		echo "Successfully Logged Out!";
