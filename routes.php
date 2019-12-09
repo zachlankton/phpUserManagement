@@ -8,8 +8,17 @@
 		// SUPER USER ROUTES
 		require "../../super_user_db.php";
 		switch ($uri) {
-			case "/adduser":
+			case "/addUser":
 				require "../routes/adduser.php";
+				die();
+			case "/editUser":
+				require "../routes/editUser.php";
+				die();
+			case "/getUserByName":
+				require "../routes/getUserByName.php";
+				die();
+			case "/getUserById":
+				require "../routes/getUserById.php";
 				die();
 			
 		}
