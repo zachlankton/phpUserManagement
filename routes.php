@@ -1,6 +1,8 @@
 <?php
 	global $uri;
 	global $account;
+	
+	$referer = $_SERVER['HTTP_REFERER'];
 
 	if ($account->isSuper()){
 		// SUPER USER ROUTES
@@ -21,6 +23,10 @@
 		require "../routes/asdf.php";
 		die();
 	} elseif ( substr($uri, 0, 6) == "/couch" ) {
+		require "../routes/couch.php";
+		die();
+	} elseif (strpos($referer, "/couch") !== FALSE) {
+		$uri = "/couch" . $uri;
 		require "../routes/couch.php";
 		die();
 	} elseif ($uri == "/getuser") {
