@@ -45,9 +45,6 @@
 		$query_str = substr($uri, $queMarkPos);
 		$uri = substr($uri, 0, $queMarkPos);
 	}
-	echo $query_str."</br>";
-	echo $uri;
-	die();
 
 	/* Include the database connection file (remember to change the connection parameters) */
 	require '../../user_login_db.php';
