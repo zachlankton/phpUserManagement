@@ -70,6 +70,7 @@
 		// if no user is set in POST request then forward user to login page
 		if (!isset($_POST['user'])){
 			header("Location: /login.html");
+			die();
 		}
 		
 		// If there is already a user logged in... logout first.
@@ -90,6 +91,7 @@
 			if ($login){
 				// IF LOGIN SUCCESSFUL FORWARD USER TO THE ORIGINAL REQUESTED URI
 				header("Location: ".$_SESSION['requested_uri']);
+				die();
 			}else{
 				echo "Invalid User and/or Password!";
 				die();
