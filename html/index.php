@@ -136,11 +136,11 @@
 	{
 		// User is not Authenticated, capture this request URI and forward user
 		// to login page
-		if ($uri != "/login" && $uri != "/logout"){
+		//if ($uri != "/login" && $uri != "/logout"){
 			$_SESSION['requested_uri'] = $uri;
-		}else{
-			$_SESSION['requested_uri'] = "/";
-		}
+		//}else{
+		//	$_SESSION['requested_uri'] = "/";
+		//}
 		header("Location: /login.html");
 	}
 ?>
