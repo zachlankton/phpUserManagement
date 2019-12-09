@@ -41,7 +41,7 @@
 	$uri = $_SERVER["REQUEST_URI"];
 	$query_str = $_SERVER["QUERY_STRING"];
 	$uri = str_replace($query_str, "", $uri);
-	$uri = substr($uri, 0, -1); //Remove "?" From URI;
+	$uri = str_replace("?", "", $uri); //Remove "?" From URI;
 
 
 	/* Include the database connection file (remember to change the connection parameters) */
