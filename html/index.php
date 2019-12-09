@@ -39,6 +39,9 @@
 
 	// CAPTURE REQUESTED URI
 	$uri = $_SERVER["REQUEST_URI"];
+	$query = $_SERVER["QUERY_STRING"];
+	$uri = str_replace($query, "", $uri);
+	echo $uri;
 
 	/* Include the database connection file (remember to change the connection parameters) */
 	require '../../user_login_db.php';
