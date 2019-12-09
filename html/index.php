@@ -37,16 +37,10 @@
 	// START SESSION
 	session_start();
 
-	var_dump($_GET);
-
 	// CAPTURE REQUESTED URI
 	$uri = $_SERVER["REQUEST_URI"];
-	$query_str = "";
-	$queMarkPos = strpos($uri, "?");
-	if ($queMarkPos !== FALSE){
-		$query_str = substr($uri, $queMarkPos);
-		$uri = substr($uri, 0, $queMarkPos);
-	}
+	$query_str = $_SERVER["QUERY_STRING"];
+	$uri = str_replace($query_str, "", $uri);
 
 	/* Include the database connection file (remember to change the connection parameters) */
 	require '../../user_login_db.php';
