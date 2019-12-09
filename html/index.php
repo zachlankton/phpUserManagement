@@ -39,8 +39,9 @@
 
 	// CAPTURE REQUESTED URI
 	$uri = $_SERVER["REQUEST_URI"];
-	$query = $_SERVER["QUERY_STRING"];
-	$uri = str_replace($query, "", $uri);
+	$query_str = $_SERVER["QUERY_STRING"];
+	$uri = str_replace($query_str, "", $uri);
+	echo $query_str."</br>";
 	echo $uri;
 	die();
 
