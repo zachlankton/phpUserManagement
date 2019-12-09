@@ -498,7 +498,7 @@ class Account
 		$id = NULL;
 		
 		/* Search the ID on the database */
-		$query = 'SELECT * FROM accounts WHERE (account_name = :name)';
+		$query = 'SELECT account_id, account_name, account_reg_time, account_enabled, super_user FROM accounts WHERE (account_name = :name)';
 		$values = array(':name' => $name);
 		
 		try
