@@ -2,8 +2,11 @@
   $req = $_SERVER['REQUEST_METHOD'];
   $uri = substr($_SERVER['REQUEST_URI'], 6);
   
-  var_dump($_POST);
+  $json = file_get_contents('php://input');
+  var_dump($json);
   die();
+
+
   // create curl resource
   $ch = curl_init();
 
