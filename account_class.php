@@ -483,7 +483,7 @@ class Account
 	}
 	
 	/* Returns the account id having $name as name, or NULL if it's not found */
-	public function getIdFromName(string $name): ?int
+	public function getIdFromName(string $name)
 	{
 		/* Global $pdo object */
 		global $pdo;
