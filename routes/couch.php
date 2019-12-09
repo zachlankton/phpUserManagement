@@ -28,8 +28,11 @@
   // $output contains the output string
   $output = curl_exec($ch);
 
+  $cType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+
   // close curl resource to free up system resources
   curl_close($ch); 
 
+  header('Content-Type: '.$cType);
   echo $output;
 ?>
