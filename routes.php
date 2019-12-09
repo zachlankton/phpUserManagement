@@ -17,8 +17,8 @@
 			case "/getUserByName":
 				require "../routes/getUserByName.php";
 				die();
-			case "/getUserById":
-				require "../routes/getUserById.php";
+			case "/users":
+				require "../routes/users.php";
 				die();
 			
 		}
