@@ -1,3 +1,5 @@
 <?php
-  echo "get user by name";
+  global $account;
+  $name = $_GET['name'];
+  echo $account->getIdFromName($name);
 ?>
