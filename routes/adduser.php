@@ -2,7 +2,7 @@
 	global $account;
 
 	if (!isset($_POST['user'])){
-		echo "No User!";
+		require "../routes/adduser.html";
 		die();
 	}
 
@@ -18,6 +18,6 @@
 		echo $e->getMessage();
 		die();
 	}
-
+	
 	echo $newId;
 ?>
