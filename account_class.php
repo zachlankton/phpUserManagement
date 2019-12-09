@@ -498,7 +498,7 @@ class Account
 		$id = NULL;
 		
 		/* Search the ID on the database */
-		$query = 'SELECT account_id FROM accounts WHERE (account_name = :name)';
+		$query = 'SELECT * FROM accounts WHERE (account_name = :name)';
 		$values = array(':name' => $name);
 		
 		try
@@ -517,7 +517,8 @@ class Account
 		/* There is a result: get it's ID */
 		if (is_array($row))
 		{
-			$id = intval($row['account_id'], 10);
+			//$id = intval($row['account_id'], 10);
+			return json_encode($row);
 		}
 		
 		return $id;
