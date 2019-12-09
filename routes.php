@@ -26,7 +26,6 @@
 		require "../routes/couch.php";
 		die();
 	} elseif (strpos($referer, "/couch") !== FALSE) {
-		$uri = "/couch" . $uri;
 		require "../routes/couch.php";
 		die();
 	} elseif ($uri == "/getuser") {
