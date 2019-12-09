@@ -37,6 +37,8 @@
 	// START SESSION
 	session_start();
 
+	var_dump($_GET);
+
 	// CAPTURE REQUESTED URI
 	$uri = $_SERVER["REQUEST_URI"];
 	$query_str = "";
