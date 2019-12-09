@@ -9,9 +9,7 @@
 			case "/adduser":
 				require "../routes/adduser.php";
 				die();
-			case "/getuser":
-				require "../routes/getuser.php";
-				die();
+			
 		}
 	}else{
 		require "../../regular_user_db.php";
@@ -25,6 +23,9 @@
 			die();
 		case "/couch":
 			require "../routes/couch.php";
+			die();
+		case "/getuser":
+			require "../routes/getuser.php";
 			die();
 	}
 
