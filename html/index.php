@@ -41,6 +41,10 @@
 	$uri = $_SERVER["REQUEST_URI"];
 	$query_str = $_SERVER["QUERY_STRING"];
 	$uri = str_replace($query_str, "", $uri);
+	echo $query_str."<br>";
+	echo $uri;
+	die();
+
 
 	/* Include the database connection file (remember to change the connection parameters) */
 	require '../../user_login_db.php';
