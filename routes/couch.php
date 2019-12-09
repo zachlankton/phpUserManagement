@@ -2,10 +2,7 @@
   $req = $_SERVER['REQUEST_METHOD'];
   $uri = substr($_SERVER['REQUEST_URI'], 6);
   
-  $json = file_get_contents('php://input');
-  var_dump($json);
-  die();
-
+  $data_string = file_get_contents('php://input');
 
   // create curl resource
   $ch = curl_init();
@@ -18,13 +15,15 @@
 
   curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $req);
 
-  if ($req = "POST"){
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $_POST['data']); 
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-      'Content-Type: application/json',                                                                                
-      'Content-Length: ' . strlen($data_string))                                                                       
-    );    
-  }
+  //if ($req = "POST"){
+  
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string); 
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
+    'Content-Type: application/json',                                                                                
+    'Content-Length: ' . strlen($data_string))                                                                       
+  );    
+  
+//}
 
   // $output contains the output string
   $output = curl_exec($ch);
