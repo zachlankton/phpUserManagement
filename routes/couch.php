@@ -2,6 +2,13 @@
   $req = $_SERVER['REQUEST_METHOD'];
   
   $uri = $_SERVER['REQUEST_URI'];
+  
+  // if this request is for adding an admin then do nothing
+  if (strpos($uri, "/couch/_node/couchdb@127.0.0.1/_config/admins/") !== FALSE){
+    die();
+  }
+
+  // if this uri contains "/couch" then strip it for forward to couchdb server
   if (substr($uri, 0, 6) == "/couch"){
     $uri = substr($_SERVER['REQUEST_URI'], 6);
   }
