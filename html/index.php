@@ -42,7 +42,6 @@
 	$query_str = $_SERVER["QUERY_STRING"];
 	$uri = str_replace($query_str, "", $uri);
 	$uri = str_replace("?", "", $uri); //Remove "?" From URI;
-	echo $_SESSION['requested_uri'];
 
 	/* Include the database connection file (remember to change the connection parameters) */
 	require '../../user_login_db.php';
@@ -136,11 +135,11 @@
 	{
 		// User is not Authenticated, capture this request URI and forward user
 		// to login page
-		//if ($uri != "/login" && $uri != "/logout"){
+		if ($uri != "/login" && $uri != "/logout"){
 			$_SESSION['requested_uri'] = $uri;
-		//}else{
-		//	$_SESSION['requested_uri'] = "/";
-		//}
+		}else{
+			$_SESSION['requested_uri'] = "/";
+		}
 		header("Location: /login.html");
 	}
 ?>
