@@ -20,7 +20,9 @@
 			case "/users":
 				require "../routes/users.php";
 				die();
-			
+			case "/admin":
+				require "../routes/admin.php";
+				die();
 		}
 	}else{
 		require "../../regular_user_db.php";
