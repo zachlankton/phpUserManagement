@@ -5,7 +5,7 @@
   $sth->execute();
 
   /* Fetch all of the remaining rows in the result set */
-  $result = $sth->fetchAll();
+  $result = $sth->fetchAll(PDO::FETCH_ASSOC);
 
   header('Content-Type: application/json');
   echo json_encode($result);
