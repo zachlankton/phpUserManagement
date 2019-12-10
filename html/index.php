@@ -42,7 +42,7 @@
 	$query_str = $_SERVER["QUERY_STRING"];
 	$uri = str_replace($query_str, "", $uri);
 	$uri = str_replace("?", "", $uri); //Remove "?" From URI;
-
+	echo $_SESSION['requested_uri'];
 
 	/* Include the database connection file (remember to change the connection parameters) */
 	require '../../user_login_db.php';
