@@ -59,7 +59,7 @@
       ':count'    => $match_count
     );
   $sth->execute( $values );
-  die()
+  die();
   }
 
 ?>
