@@ -28,8 +28,6 @@
 	}else{
 		require "../../regular_user_db.php";
 		require "../check_permissions.php";
-		echo $route_match;
-		die();
 	}
 
 
