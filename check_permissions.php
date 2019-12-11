@@ -16,7 +16,8 @@
   // Find a Route that Matches the Requested URI
   $sth = $pdo->prepare("
     SELECT * FROM Application.`route_permissions` 
-    WHERE request_type = :req_type AND :uri RLIKE route_regexp ");
+    WHERE request_type = :req_type AND :uri RLIKE route_regexp
+    ORDER BY `route_permissions`.`priority` ASC ");
   $sth->execute( array(':req_type' => $req_type, ':uri' => $uri) );
   $routes = $sth->fetchAll(PDO::FETCH_ASSOC);
 
