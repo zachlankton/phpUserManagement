@@ -69,6 +69,8 @@ class Account
 	
 	public function getUserRoles()
 	{
+		global $pdo;
+		
 		try
 		{
 			$sth = $pdo->prepare("SELECT role FROM Application.`user_roles` WHERE user = :user ");
