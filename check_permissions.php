@@ -27,7 +27,7 @@
     http_response_code(404);
     echo "URI: ".$uri."<br>";
     echo "Request Type: " . $req_type . "<br>";
-    echo "Route Not Found For Request Type.";
+    echo "Permissions For Route and Request Type Not Established.";
     $failed = TRUE;
     $err = "404 NOT FOUND";
   }
