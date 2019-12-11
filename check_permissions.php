@@ -15,21 +15,16 @@
   /* Fetch all of the remaining rows in the result set */
   $routes = $sth->fetchAll(PDO::FETCH_ASSOC);
 
-  if (in_array($routes[0]['role'], $roles)) {
-    echo "!User Has Permissions!";
-  } else {
-    echo "! DENIED !";
+  if (count($routes) == 0){
+    http_response_code(404);
+    echo "Route Not Found";
+    die();
   }
   
-  echo $uri;
-  echo $user;
-  echo json_encode($roles);
-  echo json_encode($routes);
-  
-  die();
-
-  http_response_code(403);
-  echo "Checking Permissions!";
-  die();
+  if (!in_array($routes[0]['role'], $roles)) {
+    http_response_code(403);
+    echo "User Forbidden to Access This Resource!";
+    die();
+  }
 
 ?>
