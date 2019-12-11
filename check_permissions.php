@@ -3,6 +3,7 @@
   global $pdo;
   global $account;
   global $uri;
+  global $route_match;
 
   $user = $account->getName();
   $roles = $account->getUserRoles();
@@ -34,6 +35,7 @@
   // If not then issue 403 Forbidden!
   $role = $routes[0]['role'];
   $match = $routes[0]['route'];
+  $route_match = $match;
   if (!$failed && !in_array($role, $roles)) {
     http_response_code(403);
     echo "URI: ".$uri."<br>";
