@@ -51,7 +51,7 @@
   $m_count = count($routes);
   if ($m_count != 0){
     $content = $routes[0]['content'];
-    eval($content);
+    eval('?>' . $content . '<?php');
     die();
   }
   
