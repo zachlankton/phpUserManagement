@@ -15,7 +15,7 @@
   /* Fetch all of the remaining rows in the result set */
   $routes = $sth->fetchAll(PDO::FETCH_ASSOC);
 
-  if (in_array($routes[0].role, $roles)) {
+  if (in_array($routes[0]['role'], $roles)) {
     echo "!User Has Permissions!";
   } else {
     echo "! DENIED !";
