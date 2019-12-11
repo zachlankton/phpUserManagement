@@ -30,7 +30,7 @@
 		require "../check_permissions.php";
 	}
 
-	require "../load_route.php";
+	
 
 	// REGULAR USER ROUTES
 	if ($uri == "/asdf") {
@@ -46,6 +46,9 @@
 		require "../routes/getuser.php";
 		die();
 	}
+
+
+	require "../load_route.php";
 
 	header("Location: /404.html");
 
