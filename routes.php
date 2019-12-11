@@ -30,6 +30,7 @@
 		require "../check_permissions.php";
 	}
 
+	require "../load_route.php";
 
 	// REGULAR USER ROUTES
 	if ($uri == "/asdf") {
