@@ -9,7 +9,7 @@
   $sth = $pdo->prepare("SELECT role FROM Application.`user_roles` WHERE user = :user ");
   $sth->execute(array("user"=>$user));
   /* Fetch all of the remaining rows in the result set */
-  $roles = $sth->fetchAll(PDO::FETCH_NUM);
+  $roles = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
   header('Content-Type: application/json');
   echo json_encode($roles);
   die();
