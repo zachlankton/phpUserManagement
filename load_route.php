@@ -29,14 +29,10 @@
     // If there are no results then 404
     $match_count = count($routes);
     if ($match_count == 0){
-      http_response_code(404);
-      echo "URI: ".$uri."<br>";
-      echo "Request Type: " . $req_type . "<br>";
-      echo "Route Not Found For Request Type.";
-      die();
+      $route_match = $uri
+    }else{
+      $route_match = $routes[0]['route'];
     }
-    
-    $route_match = $routes[0]['route'];
   }
   
   
