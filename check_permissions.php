@@ -27,7 +27,7 @@
   
   // Check if the User Has the Appropriate Role to Access The Requested Resource
   // If not then issue 403 Forbidden!
-  $role = $routes[0]['role']
+  $role = $routes[0]['role'];
   if (!in_array($role, $roles)) {
     http_response_code(403);
     echo "URI: ".$uri."<br>";
