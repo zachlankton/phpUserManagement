@@ -63,8 +63,24 @@ class Account
 			"id" => $this->id,
 			"name" => $this->name,
 			"isSuper" => $this->super,
-			"isAuthenticated" => $this->authenticated
+			"roles" => $this->getUserRoles()
 		);
+	}
+	
+	public function getUserRoles()
+	{
+		try
+		{
+			$sth = $pdo->prepare("SELECT role FROM Application.`user_roles` WHERE user = :user ");
+			$sth->execute(array(':user'=> $this->name));
+			/* Fetch all of the remaining rows in the result set */
+			$roles = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
+		}catch (PDOException $e)
+		{
+			throw new Exception("Could not get User Roles.");
+		}
+		
+		return $roles;
 	}
 	
 	/* Add a new account to the system and return its ID (the account_id column of the accounts table) */
