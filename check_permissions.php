@@ -34,7 +34,7 @@
   // If not then issue 403 Forbidden!
   $role = $routes[0]['role'];
   $match = $routes[0]['route'];
-  if (!in_array($role, $roles)) {
+  if (!$failed && !in_array($role, $roles)) {
     http_response_code(403);
     echo "URI: ".$uri."<br>";
     echo "Request Type: " . $req_type . "<br>";
