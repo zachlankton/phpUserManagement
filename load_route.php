@@ -29,7 +29,7 @@
     // If there are no results then 404
     $match_count = count($routes);
     if ($match_count == 0){
-      $route_match = $uri
+      $route_match = $uri;
     }else{
       $route_match = $routes[0]['route'];
     }
