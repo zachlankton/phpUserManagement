@@ -4,14 +4,11 @@
   global $account;
 
   $user = $account->getName();
-  echo $user;
+  $roles = $account->getUserRoles();
   
-  $sth = $pdo->prepare("SELECT role FROM Application.`user_roles` WHERE user = :user ");
-  $sth->execute(array("user"=>$user));
-  /* Fetch all of the remaining rows in the result set */
-  $roles = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
-  header('Content-Type: application/json');
+  echo $user;
   echo json_encode($roles);
+  
   die();
 
   http_response_code(403);
