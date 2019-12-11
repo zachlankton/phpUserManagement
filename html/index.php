@@ -33,7 +33,9 @@
 		=====OR=====
 		It will forward the user to the login page.
 	*/
-	
+
+	include 'vendor/autoload.php';
+
 	// START SESSION
 	session_start();
 
