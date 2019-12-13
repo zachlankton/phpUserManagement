@@ -19,10 +19,10 @@
   if ($account->isSuper()){
       // Find a Route that Matches the Requested URI
     $sth = $pdo->prepare("
-      SELECT * FROM Application.`route_permissions` 
-      WHERE request_type = :req_type AND :uri RLIKE route_regexp 
-      ORDER BY `route_permissions`.`priority` ASC ");
-    $sth->execute( array(':req_type' => $req_type, ':uri' => $uri) );
+      SELECT * FROM Application.`routes` 
+      WHERE :uri RLIKE route_regexp 
+      ORDER BY `routes`.`route` DESC ");
+    $sth->execute( array(':uri' => $uri) );
     $routes = $sth->fetchAll(PDO::FETCH_ASSOC);
 
     
