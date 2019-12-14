@@ -2,6 +2,7 @@
 	global $uri;
 	global $account;
 	$route_match = "";
+	$route_vars = array();
 	
 	$referer = $_SERVER['HTTP_REFERER'];
 
