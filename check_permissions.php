@@ -4,10 +4,11 @@
   global $account;
   global $uri;
   global $route_match;
+  global $req_type;
 
   $user = $account->getName();
   $roles = $account->getUserRoles();
-  $req_type = $_SERVER['REQUEST_METHOD'];
+
   $failed = FALSE;
   $match = "";
   $match_count = 0;
