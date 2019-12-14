@@ -26,7 +26,7 @@
     $routes = $sth->fetchAll(PDO::FETCH_ASSOC);
 
     
-    // If there are no results then 404
+    // If there are no results then use $uri
     $match_count = count($routes);
     if ($match_count == 0){
       $route_match = $uri;
@@ -35,7 +35,23 @@
     }
   }
   
+
+
   
+// PARSE ANY ROUTE VARIABLES INTO AN ASSOC ARRAY (OBJECT)
+    $uri_split = explode("/", $uri);
+    $route_split = explode("/", $route_match);
+    $route_vars = array();
+    
+    foreach ($route_split as $key => $value) {
+        $matches = array();
+        $pMatch = preg_match("/^\{([\w]+)\}$/", $value, $matches);
+        
+        if ($pMatch){
+            $route_vars[$matches[1]] = $uri_split[$key];
+        }   
+    }
+
 
   
   // Find a Route that Matches the Requested URI
@@ -45,6 +61,7 @@
   $sth->execute( array(':route' => $route_match) );
   $routes = $sth->fetchAll(PDO::FETCH_ASSOC);
 
+    
   $m_count = count($routes);
   if ($m_count != 0){
     $content = $routes[0]['content'];
