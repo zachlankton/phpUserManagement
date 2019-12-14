@@ -42,7 +42,6 @@
 // PARSE ANY ROUTE VARIABLES INTO AN ASSOC ARRAY (OBJECT)
     $uri_split = explode("/", $uri);
     $route_split = explode("/", $route_match);
-    $route_vars = array();
     
     foreach ($route_split as $key => $value) {
         $matches = array();
