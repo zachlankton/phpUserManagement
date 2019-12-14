@@ -3,6 +3,7 @@
 	global $account;
 	$route_match = "";
 	$route_vars = array();
+	$req_type = $_SERVER['REQUEST_METHOD'];
 	
 	$referer = $_SERVER['HTTP_REFERER'];
 
