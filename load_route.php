@@ -3,6 +3,7 @@
   global $uri;
   global $route_match;
   global $account;
+  global $route_vars;
 
   
   $user = $account->getName();
