@@ -38,7 +38,7 @@
 	session_start();
 
 	// Composer Autoload
-	require '/vendor/autoload.php';
+	require './vendor/autoload.php';
 
 	// CAPTURE REQUESTED URI
 	$uri = $_SERVER["REQUEST_URI"];
