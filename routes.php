@@ -5,7 +5,8 @@
 	$route_vars = array();
 	$req_type = $_SERVER['REQUEST_METHOD'];
 	
-	$referer = $_SERVER['HTTP_REFERER'];
+	
+	$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "";
 
 	if ($account->isSuper()){
 		// SUPER USER ROUTES
