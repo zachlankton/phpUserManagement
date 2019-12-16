@@ -13,7 +13,7 @@
 		// Turn on Error Reporting For Super Users!
 		$whoops = new \Whoops\Run;
 		$whoops->prependHandler(new \Whoops\Handler\PrettyPageHandler);
-		$handler->setEditor(function($file, $line) {
+		$whoops->setEditor(function($file, $line) {
 		    return "https://erp2.mmpmg.com/edit/$uri";
 		});
 		$whoops->register();
