@@ -64,8 +64,10 @@
     
   $m_count = count($routes);
   if ($m_count != 0){
-    $content = $routes[0]['content'];
-    eval('?>' . $content . '<?php');
+    //$content = $routes[0]['content'];
+    $route = $routes[0]['route'];
+    require("/var/www/routes/app_routes/$route");
+    //eval('?>' . $content . '<?php');
     die();
   }
   
