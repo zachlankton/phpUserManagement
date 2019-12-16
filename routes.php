@@ -12,10 +12,12 @@
 		
 		// Turn on Error Reporting For Super Users!
 		$whoops = new \Whoops\Run;
-		$whoops->prependHandler(new \Whoops\Handler\PrettyPageHandler);
-		$whoops->setEditor(function($file, $line) {
+		$handler = new \Whoops\Handler\PrettyPageHandler;
+		$handler->setEditor(function($file, $line) {
 		    return "https://erp2.mmpmg.com/edit/$uri";
 		});
+		$whoops->prependHandler($handler);
+		
 		$whoops->register();
 		
 		// SUPER USER ROUTES
