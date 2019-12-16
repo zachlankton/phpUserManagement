@@ -9,6 +9,12 @@
 	$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "";
 
 	if ($account->isSuper()){
+		
+		// Turn on Error Reporting For Super Users!
+		$whoops = new \Whoops\Run;
+		$whoops->prependHandler(new \Whoops\Handler\PrettyPageHandler);
+		$whoops->register();
+		
 		// SUPER USER ROUTES
 		require "../../super_user_db.php";
 		switch ($uri) {
