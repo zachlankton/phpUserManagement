@@ -68,7 +68,7 @@
     $route = $routes[0]['route'];
     $route_file_name = str_replace("/", "_", $route);
     $route_file_name = str_replace(".*", ".", $route_file_name);
-    require("/var/www/routes/app_routes/$route");
+    require("/var/www/routes/app_routes/$route_file_name");
     die();
   }
   
