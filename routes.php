@@ -14,6 +14,7 @@
 		$whoops = new \Whoops\Run;
 		$handler = new \Whoops\Handler\PrettyPageHandler;
 		$handler->setEditor(function($file, $line) {
+			global $uri;
 		    return "https://erp2.mmpmg.com/edit/$uri";
 		});
 		$whoops->prependHandler($handler);
