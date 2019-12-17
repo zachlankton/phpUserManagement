@@ -54,7 +54,7 @@
 
 
   
-  // Find a Route that Matches the Requested URI
+  // Get The Route
   $sth = $pdo->prepare("
     SELECT * FROM Application.`routes` 
     WHERE route = :route");
@@ -70,6 +70,8 @@
     $route_file_name = str_replace(".*", ".", $route_file_name);
     require("/var/www/routes/app_routes/$route_file_name");
     
+    
+    // If we are a super user add a handy edit button in the lower right corner of the page.
     if ($account->isSuper()){
 
         ?>
