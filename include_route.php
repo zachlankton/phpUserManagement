@@ -18,7 +18,8 @@ function include_route($uri, $ir_options = NULL)
     $match_count = count($routes);
     if ($match_count == 0)
     {
-        $route_match = $uri;
+        echo "Route: '$uri' - Not Found";
+        return 0;
     }
     else
     {
