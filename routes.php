@@ -15,7 +15,7 @@
 		$handler = new \Whoops\Handler\PrettyPageHandler;
 		$handler->setEditor(function($file, $line) {
 			if (strpos($file, "/var/www/routes/app_routes") > -1){
-				$uri = str_replace("/var/www/routes/app_routes", "", $file);
+				$uri = str_replace("/var/www/routes/app_routes/", "", $file);
 				$uri = str_replace("_", "/", $uri);
     				$uri = str_replace(".", ".*", $uri);
 	    			return "https://erp2.mmpmg.com/edit$uri";
