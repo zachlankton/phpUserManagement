@@ -1,6 +1,6 @@
 <?php
 
-    function include_route($route, $options){
+    function include_route($route, $optionsv = NULL){
         echo $route;
     }
     
