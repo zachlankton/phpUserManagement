@@ -69,6 +69,24 @@
     $route_file_name = str_replace("/", "_", $route);
     $route_file_name = str_replace(".*", ".", $route_file_name);
     require("/var/www/routes/app_routes/$route_file_name");
+    
+    if ($account->isSuper()){
+
+        ?>
+        <script>
+            var d = document.createElement("div");
+            var a = document.createElement("a");
+            a.href = "/edit" + location.pathname;
+            a.innerHTML = "✎";
+            d.append(a);
+            d.setAttribute("style", "position: fixed;height:30px;width:30px;bottom:0px;right:0px;background-color:yellow;text-align: center;font-size: 24px;");
+            document.body.append(d);
+        </script>
+        <?php
+      
+    }
+    
+    
     die();
   }
   
