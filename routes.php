@@ -14,11 +14,16 @@
 		$whoops = new \Whoops\Run;
 		$handler = new \Whoops\Handler\PrettyPageHandler;
 		$handler->setEditor(function($file, $line) {
-			global $uri;
-		    return "https://erp2.mmpmg.com/edit$uri";
+			if (strpos($file, "/var/www/routes/app_routes") > -1){
+				$uri = str_replace("/var/www/routes/app_routes", "", $file);
+	    			return "https://erp2.mmpmg.com/edit$uri";
+			} else {
+				$uri = str_replace("/var/www", "", $file);
+				return "https://github.com/zachlankton/phpUserManagement/blob/master$uri";
+			}
+
 		});
 		$whoops->prependHandler($handler);
-		
 		$whoops->register();
 		
 		// SUPER USER ROUTES
