@@ -1,4 +1,5 @@
 <?php
+	require("../include_route.php");
 	global $uri;
 	global $account;
 	$route_match = "";
