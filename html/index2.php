@@ -126,10 +126,19 @@ function find_routes(){
 			$route['var_count'] = get_route_var_count($route['route']);
 			$route['route_length'] = get_route_length($route['route']);
 			return $route;
+		} else {
+			return false;
 		}
 	}
 
-	$found_routes = array_map('find', $routes);
+	$found_routes = [];
+	foreach ($routes as $key => $value){
+		$f = find($value);
+		if ($f !== false){
+			$found_routes[] = $f;
+		}
+	}
+
 	echo json_encode($found_routes, JSON_PRETTY_PRINT);
 	die();
 	return found_routes;
