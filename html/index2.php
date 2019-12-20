@@ -89,7 +89,7 @@
 
 
 
-	function getUserRoles()
+	function get_user_roles()
 	{
 		global $pdo;
 		global $user;
