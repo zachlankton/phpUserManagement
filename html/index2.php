@@ -87,6 +87,8 @@
 
 	function get_user_info()
 	{
+		echo "getting user info <br>";
+		
 		global $pdo;
 		global $user;
 		global $user_id;
