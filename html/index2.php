@@ -47,8 +47,9 @@
 	$user_is_super = false;
 	$user_info = NULL;
 	$user_roles = [];
-	get_user_info();
 	get_user_roles();
+	get_user_info();
+
 
 	echo json_encode($user_info);
 	die();
