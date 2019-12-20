@@ -97,7 +97,7 @@ function get_routes(){
     
 	$query = "
 		SELECT
-		    route, route_regexp, content_type
+		    route, route_regexp, content-type
 		FROM
 		    `Application`.`routes`
 	";
