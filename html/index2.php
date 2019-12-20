@@ -42,11 +42,11 @@
 	$user = "";
 	authenticate_session();
 
-	$user_id = $_SESSION['user_id'] ?? NULL;
-	$user_enabled = $_SESSION['user_enabled'] ?? NULL;
-	$user_is_super = $_SESSION['user_is_super'] ?? false;
-	$user_roles = $_SESSION['user_roles'] ?? [];
-	$user_info = $_SESSION['user_info'] ?? get_user_info();
+	$user_id 	= $_SESSION['user_id'] 		?? NULL;
+	$user_enabled 	= $_SESSION['user_enabled'] 	?? NULL;
+	$user_is_super 	= $_SESSION['user_is_super'] 	?? false;
+	$user_roles 	= $_SESSION['user_roles'] 	?? [];
+	$user_info 	= $_SESSION['user_info'] 	?? get_user_info();
 
 	echo json_encode($user_info);
 	die();
@@ -138,6 +138,12 @@
 			'user_enabled' 	=> $user_enabled,
 			'roles'		=> $user_roles
 		];
+		
+		$_SESSION['user_id'] = $user_id;
+		$_SESSION['user_enabled'] = $user_enabled;
+		$_SESSION['user_is_super'] = $user_is_super;
+		$_SESSION['user_roles'] = $user_roles;
+		$_SESSION['user_info'] = $user_info;
 		
 		return $user_info;
 	}
