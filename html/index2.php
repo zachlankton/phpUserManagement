@@ -51,6 +51,7 @@
 	get_user_roles();
 
 	echo json_encode($user_info);
+	die();
 
 	function authenticate_session(){
 		
