@@ -123,7 +123,6 @@ function find_routes(){
 		if ($f == 1){
 			$route_file_name = str_replace("/", "_", $route['route']);
     			$route['route_file_name'] = str_replace(".*", ".", $route_file_name);
-			$route['var_count'] = get_route_var_count($route['route']);
 			$route['route_length'] = get_route_length($route['route']);
 			return $route;
 		} else {
@@ -138,17 +137,14 @@ function find_routes(){
 			$found_routes[] = $f;
 		}
 	}
+	
+	// Sort Results so the best Matched Route is First.
+	$route_len = array_column($found_routes, 'route_length');
+	array_multisort($route_len, SORT_DESC, $found_routes);
 
 	echo json_encode($found_routes, JSON_PRETTY_PRINT);
 	die();
 	return found_routes;
-}
-
-function get_route_var_count($route){
-	$matches = array();
-	$pMatch = preg_match_all("/\{\w+\}/", $route, $matches);
-	var_dump($matches);
-	return $pMatch;
 }
 
 function get_route_length($route){
