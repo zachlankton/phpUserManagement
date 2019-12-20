@@ -334,7 +334,7 @@ function setup_error_reporting(){
 		// if there was a previously unauthenticated request 
 		// that was rerouted to the login screen
 		// then route the user back to the originally requested URI
-		if ( isset($_SESSION['requested_uri'] ){
+		if ( isset($_SESSION['requested_uri']) ){
 			$req_uri = $_SESSION['requested_uri'];
 			unset( $_SESSION['requested_uri'] );
 			header("Location: " . $req_uri );
