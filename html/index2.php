@@ -107,7 +107,7 @@ function get_routes(){
 	$prepared_statement->execute();
 	$results_assoc_array = $prepared_statement->fetchAll(PDO::FETCH_ASSOC);
 	
-	echo json_encode($found_routes, JSON_PRETTY_PRINT);
+	echo json_encode($results_assoc_array, JSON_PRETTY_PRINT);
 	return $results_assoc_array;
 }
 
