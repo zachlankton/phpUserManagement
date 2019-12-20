@@ -37,6 +37,117 @@
 	// START SESSION
 	session_start();
 
+	// global db connection object
+	$pdo = NULL;
+	$user = "";
+	authenticate_session();
+
+	$user_id = NULL;
+	$user_enabled = NULL;
+	$user_is_super = false;
+	$user_info = NULL;
+	$user_roles = [];
+	get_user_info();
+	get_user_roles();
+
+	echo json_encode($user_info);
+
+	function authenticate_session(){
+		
+		global $pdo;
+		global $user;
+		
+		/* MySQL account username */
+		$user = $_SESSION['user'] ?? $_POST['user'] ?? NULL ;
+
+		/* MySQL account password */
+		$passwd = $_SESSION['pw'] ?? $_POST['pw'] ?? NULL;
+
+		/* Connection string, or "data source name" */
+		$dsn = "mysql:host=localhost;charset=utf8";
+
+		/* Connection inside a try/catch block */
+		try
+		{  
+		   /* PDO object creation */
+		   $pdo = new PDO($dsn, $user,  $passwd, array(PDO::ATTR_PERSISTENT => true) );
+
+		   /* Enable exceptions on errors */
+		   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		}
+		catch (PDOException $e)
+		{
+		   print "Error!: " . $e->getMessage() . "<br/>";
+		   die();
+		}
+		
+		$_SESSION['user'] = $_SESSION['user'] ?? $_POST['user'];
+		$_SESSION['pw'] = $_SESSION['pw'] ?? $_POST['pw'];
+		
+	}
+
+
+
+	function getUserRoles()
+	{
+		global $pdo;
+		global $user;
+		global $user_roles;
+		
+		try
+		{
+			$sth = $pdo->prepare("SELECT role FROM Application.`user_roles` WHERE user = :user ");
+			$sth->execute(array(':user'=> $user));
+			/* Fetch all of the remaining rows in the result set */
+			$user_roles = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
+		}catch (PDOException $e)
+		{
+			throw new Exception("Could not get User Roles.");
+		}
+
+	}
+
+	function get_user_info()
+	{
+		global $pdo;
+		global $user;
+		global $user_id;
+		global $user_enabled;
+		global $user_is_super;
+		global $user_info;
+		global $user_roles;
+		
+		try
+		{
+			$sth = $pdo->prepare("SELECT 
+				account_name, account_reg_time, account_enabled, super_user
+				FROM `Users`.`accounts` WHERE account_name = :user ");
+			$sth->execute(array(':user'=> $user));
+			/* Fetch all of the remaining rows in the result set */
+			//$user_info = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
+		}catch (PDOException $e)
+		{
+			throw new Exception("Could not get User Roles.");
+		}
+		
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+			
+		if (is_array($row))
+		{
+			/* Authentication succeeded. Set the class properties (id and name) and return TRUE*/
+			$user_id = intval($row['account_id'], 10);
+			$user_enabled = ($row['account_enabled'] == 1 ? true : false);
+			$user_is_super = ($row['super_user'] == 1 ? true : false);
+		}
+		
+		$user_info = [
+			'user_name' 	=> $user,
+			'user_id'	=> $user_id,
+			'user_is_super'	=> $user_is_super,
+			'user_enabled' 	=> $user_enabled,
+			'roles'		=> $user_roles
+		];
+	}
 	// Composer Autoload
 	require './vendor/autoload.php';
 
@@ -45,37 +156,6 @@
 	$query_str = $_SERVER["QUERY_STRING"];
 	$uri = str_replace($query_str, "", $uri);
 	$uri = str_replace("?", "", $uri); //Remove "?" From URI;
-
-	/* Include the database connection file (remember to change the connection parameters) */
-
-/* MySQL account username */
-$user = $_SESSION['user'] ?? $_POST['user'] ?? NULL ;
-
-/* MySQL account password */
-$passwd = $_SESSION['pw'] ?? $_POST['pw'] ?? NULL;
-
-/* The PDO object */
-$pdo = NULL;
-
-/* Connection string, or "data source name" */
-$dsn = "mysql:host=localhost;charset=utf8";
-
-/* Connection inside a try/catch block */
-try
-{  
-   /* PDO object creation */
-   $pdo = new PDO($dsn, $user,  $passwd, array(
-	    PDO::ATTR_PERSISTENT => true
-	));
-   
-   /* Enable exceptions on errors */
-   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-}
-catch (PDOException $e)
-{
-   print "Error!: " . $e->getMessage() . "<br/>";
-   die();
-}
 
 	/* Include the Account class file */
 	require '../account_class.php';
