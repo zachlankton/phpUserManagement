@@ -5,7 +5,7 @@
 		The purpose of this file is to require any requests that are not
 		publically available in the /var/www/html folder to be authenticated.
 		====================================
-		Authenticated Request will then be forwarded to the routes.php file
+		Authenticated Request will then be processed by the load_routes function
 		
 		DO NOT PLACE ANY FILE YOU DO NOT WANT PUBLIC IN THE
 		'/var/www/html' folder
@@ -37,24 +37,260 @@
 	// START SESSION
 	session_start();
 
+	// CAPTURE REQUESTED URI
+	$uri = $_SERVER["REQUEST_URI"];
+	$query_str = $_SERVER["QUERY_STRING"];
+	$uri = str_replace($query_str, "", $uri);
+	$uri = str_replace("?", "", $uri); //Remove "?" From URI;
+
 	// global db connection object
 	$pdo = NULL;
 	$user = "";
 	authenticate_session();
 
+	// user info variables
 	$user_id 	= $_SESSION['user_id'] 		?? NULL;
 	$user_enabled 	= $_SESSION['user_enabled'] 	?? NULL;
 	$user_is_super 	= $_SESSION['user_is_super'] 	?? false;
 	$user_roles 	= $_SESSION['user_roles'] 	?? [];
 	$user_info 	= $_SESSION['user_info'] 	?? get_user_info();
 
-	echo json_encode($user_info);
-	die();
+	if ($user_enabled == false){
+		echo "User is Disabled!";
+		die();
+	}
+
+	// Composer Autoload
+	require './vendor/autoload.php';
+
+	// IF USER IS AUTHENTICATED AND REQUESTING LOGOUT
+	if ($uri == '/logout'){
+		$_SESSION = array();
+		session_destroy();
+		setcookie(session_name(),'',0,'/');
+    		session_regenerate_id(true);
+		echo "Successfully Logged Out!";
+		die();
+	}
+
+	setup_error_reporting();
+
+	// find a matching route
+	$routes = get_routes();
+	$route_match 	= "";
+	$route_vars 	= array();
+	$req_type 	= $_SERVER['REQUEST_METHOD'];
+	$referer 	= isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "";
+	
+	if ($user_is_super){
+		super_user_routes_match();
+	}else{
+		regular_user_routes_match();
+	}
+
+	load_routes();
+
+
+
+function get_routes(){
+	global $pdo;
+    
+	$query = "
+		SELECT
+		    *
+		FROM
+		    `Application`.`routes`
+	";
+
+	// USE PDO To Prepare The Query for Execution
+	$prepared_statement = $pdo->prepare($query);
+	$prepared_statement->execute();
+	$results_assoc_array = $prepared_statement->fetchAll(PDO::FETCH_ASSOC);
+	
+	echo json_encode($found_routes, JSON_PRETTY_PRINT);
+	return $results_assoc_array;
+}
+
+function find_routes(){
+	global $routes;
+	global $uri;
+	
+	function find($route)
+	{
+		global $uri;
+		$pattern = $route['route_regexp']
+		$f = preg_match("/$pattern/", $uri);
+		if ($f == 1){
+			return $route;
+		}
+	}
+
+	$found_routes = array_map('find', $routes);
+	echo json_encode($found_routes, JSON_PRETTY_PRINT);
+}
+
+function super_user_routes_match(){
+	global $uri;
+	global $route_match;
+	global $req_type;
+	global $user;
+	global $user_roles;
+	global $user_is_super;
+	
+	$match = "";
+	$match_count = 0;
+	
+
+
+	// match these static routes first
+	switch ($uri) {
+		case "/addUser":
+			require "../routes/adduser.php";
+			die();
+		case "/editUser":
+			require "../routes/editUser.php";
+			die();
+		case "/getUserByName":
+			require "../routes/getUserByName.php";
+			die();
+		case "/users":
+			require "../routes/users.php";
+			die();
+		case "/admin":
+			require "../routes/admin.php";
+			die();
+	}
+
+	
+	$routes = find_routes()
+
+	// If there are no results then use $uri
+	$match_count = count($routes);
+	if ($match_count == 0){
+		$route_match = $uri;
+	}else{
+		$route_match = $routes[0]['route'];
+	}
+	return 0;
+	
+}
+
+function regular_user_routes_match(){
+	global $pdo;
+	global $uri;
+	global $route_match;
+	global $req_type;
+	global $user;
+	global $user_roles;
+	global $user_is_super;
+	$failed = FALSE;
+	$match = "";
+	$match_count = 0;
+	
+	
+  
+  // Find a Route that Matches the Requested URI
+  $sth = $pdo->prepare("
+    SELECT * FROM Application.`route_permissions` 
+    WHERE request_type = :req_type AND :uri RLIKE route_regexp
+    ORDER BY `route_permissions`.`priority` ASC ");
+  $sth->execute( array(':req_type' => $req_type, ':uri' => $uri) );
+  $routes = $sth->fetchAll(PDO::FETCH_ASSOC);
+  // If there are no results then 404
+  $match_count = count($routes);
+  if ($match_count == 0){
+    http_response_code(404);
+    echo "URI: ".$uri."<br>";
+    echo "Request Type: " . $req_type . "<br>";
+    echo "Permissions For Route and Request Type Not Established.";
+    $failed = TRUE;
+    $err = "404 NOT FOUND";
+  }
+  
+  // Check if the User Has the Appropriate Role to Access The Requested Resource
+  // If not then issue 403 Forbidden!
+  $role = $routes[0]['role'];
+  $match = $routes[0]['route'];
+  $route_match = $match;
+  if (!$failed && !in_array($role, $roles)) {
+    http_response_code(403);
+    echo "URI: ".$uri."<br>";
+    echo "Request Type: " . $req_type . "<br>";
+    echo "User Forbidden to Access This Resource! <br>";
+    echo $role . " Role Required ";
+    $failed = TRUE;
+    $err = "403 FORBIDDEN";
+  }
+  if ($failed) {
+    // Find a Route that Matches the Requested URI
+  $sth = $pdo->prepare("INSERT INTO `Application`.`access_error_log`(`error_type`, 
+  `user_name`, `uri_requested`, `request_type`, `role_required`, `route_match`, `match_count`) 
+  VALUES (:err,:user,:uri,:req_type,:role,:match,:count) ");
+    $values = array(
+      ':err'      => $err,
+      ':user'     => $user,
+      ':uri'      => $uri,
+      ':req_type' => $req_type,
+      ':role'     => $role,
+      ':match'    => $match,
+      ':count'    => $match_count
+    );
+  $sth->execute( $values );
+  die();
+  }
+}
+
+function load_routes(){
+	global $uri;
+	global $route_match;
+	
+	// PARSE ANY ROUTE VARIABLES INTO AN ASSOC ARRAY (OBJECT)
+	$route_vars = [];
+	$uri_split = explode("/", $uri);
+	$route_split = explode("/", $route_match);
+
+	foreach ($route_split as $key => $value) {
+		$matches = array();
+		$pMatch = preg_match("/^\{([\w]+)\}$/", $value, $matches);
+
+		if ($pMatch){
+			$route_vars[$matches[1]] = $uri_split[$key];
+		}   
+	}
+	
+	$route_file_name = str_replace("/", "_", $route);
+    	$route_file_name = str_replace(".*", ".", $route_file_name);
+    	require("/var/www/routes/app_routes/$route_file_name");
+}
+
+function setup_error_reporting(){
+	
+	if ($user_is_super){
+		// Turn on Error Reporting For Super Users!
+		$whoops = new \Whoops\Run;
+		$handler = new \Whoops\Handler\PrettyPageHandler;
+		$handler->setEditor(function($file, $line) {
+			if (strpos($file, "/var/www/routes/app_routes") > -1){
+				$uri = str_replace("/var/www/routes/app_routes/", "", $file);
+				$uri = str_replace("_", "/", $uri);
+				$uri = str_replace(".", ".*", $uri);
+				return "https://erp2.mmpmg.com/edit$uri";
+			} else {
+				$uri = str_replace("/var/www", "", $file);
+				return "https://github.com/zachlankton/phpUserManagement/blob/master$uri";
+			}
+		});
+		$whoops->prependHandler($handler);
+		$whoops->register();
+	}
+	
+}
 
 	function authenticate_session(){
 		
 		global $pdo;
 		global $user;
+		global $uri;
 		
 		/* MySQL account username */
 		$user = $_SESSION['user'] ?? $_POST['user'] ?? NULL ;
@@ -65,6 +301,18 @@
 		/* Connection string, or "data source name" */
 		$dsn = "mysql:host=localhost;charset=utf8";
 
+		// if no user set then record requested URI and 
+		// redirect to login screen
+		if ($user == NULL){
+			if ($uri != "/login" && $uri != "/logout"){
+				$_SESSION['requested_uri'] = $uri;
+			}else{
+				$_SESSION['requested_uri'] = "/";
+			}
+			header("Location: /login.html");
+			die();
+		}
+	
 		/* Connection inside a try/catch block */
 		try
 		{  
@@ -76,19 +324,27 @@
 		}
 		catch (PDOException $e)
 		{
-		   print "Error!: " . $e->getMessage() . "<br/>";
-		   die();
+			echo "Login Failed!";
+		   	die();
 		}
 		
 		$_SESSION['user'] = $_SESSION['user'] ?? $_POST['user'];
 		$_SESSION['pw'] = $_SESSION['pw'] ?? $_POST['pw'];
 		
+		// if there was a previously unauthenticated request 
+		// that was rerouted to the login screen
+		// then route the user back to the originally requested URI
+		if ( isset($_SESSION['requested_uri'] ){
+			$req_uri = $_SESSION['requested_uri'];
+			unset( $_SESSION['requested_uri'] );
+			header("Location: " . $req_uri );
+			die();
+		}
+		
 	}
 
 	function get_user_info()
-	{
-		echo "getting user info <br>";
-		
+	{	
 		global $pdo;
 		global $user;
 		global $user_id;
@@ -147,109 +403,49 @@
 		
 		return $user_info;
 	}
-	// Composer Autoload
-	require './vendor/autoload.php';
-
-	// CAPTURE REQUESTED URI
-	$uri = $_SERVER["REQUEST_URI"];
-	$query_str = $_SERVER["QUERY_STRING"];
-	$uri = str_replace($query_str, "", $uri);
-	$uri = str_replace("?", "", $uri); //Remove "?" From URI;
-
-	/* Include the Account class file */
-	require '../account_class.php';
-
-	/* Create a new Account object */
-	$account = new Account();
 
 
-
-	// CHECK IF USER IS AUTHENTICATED BEFORE PROCEEDING WITH THE REQUEST
-	try
-	{
-		$login = $account->sessionLogin();
-	}
-	catch (Exception $e)
-	{
-		echo $e->getMessage();
-		die();
-	}
-
-
-
-	// IF REQUEST IS FOR '/login' then attempt login
-	if ($uri == '/login'){
-		
-		// if no user is set in POST request then forward user to login page
-		if (!isset($_POST['user'])){
-			header("Location: /login.html");
-			die();
-		}
-		
-		// If there is already a user logged in... logout first.
-		if ($login){
-			$account->logout();
-		}
-		
-		// get POST vars
-		$user = $_POST['user'];
-		$pw = $_POST['pw'];
-
-		// ATTEMPT TO LOGIN USING CREDENTIAL SENT IN POST
-		try
-		{
-			// LOGIN
-			$login = $account->login($user, $pw);
-			
-			if ($login){
-				// IF LOGIN SUCCESSFUL FORWARD USER TO THE ORIGINAL REQUESTED URI
-				header("Location: ".$_SESSION['requested_uri']);
-				die();
-			}else{
-				echo "Invalid User and/or Password!";
-				die();
-			}
-			
-		}
-		catch (Exception $e)
-		{
-			// FAIL WITH MESSAGE
-			echo $e->getMessage();
-			die();
-		}
-	}
-
-
-	
-
-
-
-	// IF USER IS AUTHENTICATED AND REQUESTING LOGOUT
-	if ($uri == '/logout'){
-		$account->logout();
-		$login = FALSE;
-		echo "Successfully Logged Out!";
-		die();
-	}
-
-
-	// IF WE HAVE MADE IT THIS FAR THE USER IS REQUESTING A RESOURCE
-	// THAT IS NOT '/login' OR 'logout'
-
-	if ($login) // if login returned true the user was successfully authenticated
-	{
-		// forward the request to the routes handler
-		require "../routes.php";
-	}
-	else
-	{
-		// User is not Authenticated, capture this request URI and forward user
-		// to login page
-		if ($uri != "/login" && $uri != "/logout"){
-			$_SESSION['requested_uri'] = $uri;
-		}else{
-			$_SESSION['requested_uri'] = "/";
-		}
-		header("Location: /login.html");
-	}
+function include_route($uri, $ir_options = NULL)
+{
+    global $req_type; //request type, ie: GET, POST, PUT, DELETE, etc...
+    global $pdo; // Database Connection
+    global $query_str; // Query String Component of URL (ie: ?test=hello)
+    global $account; // User Account Class
+    $sth = $pdo->prepare("
+      SELECT * FROM Application.`routes` 
+      WHERE :uri RLIKE route_regexp 
+      ORDER BY `routes`.`route` DESC ");
+    $sth->execute(array(
+        ':uri' => $uri
+    ));
+    $routes = $sth->fetchAll(PDO::FETCH_ASSOC);
+    // If there are no results then use $uri
+    $match_count = count($routes);
+    if ($match_count == 0)
+    {
+        echo "Route: '$uri' - Not Found";
+        return 0;
+    }
+    else
+    {
+        $route_match = $routes[0]['route'];
+    }
+    // PARSE ANY ROUTE VARIABLES INTO AN ASSOC ARRAY (OBJECT)
+    $uri_split = explode("/", $uri);
+    $route_split = explode("/", $route_match);
+    foreach ($route_split as $key => $value)
+    {
+        $matches = array();
+        $pMatch = preg_match("/^\{([\w]+)\}$/", $value, $matches);
+        if ($pMatch)
+        {
+            $route_vars[$matches[1]] = $uri_split[$key];
+        }
+    }
+    $route_file_name = str_replace("/", "_", $route_match);
+    $route_file_name = str_replace(".*", ".", $route_file_name);
+    require ("/var/www/routes/app_routes/$route_file_name");
+}
+		    
+		    
 ?>
