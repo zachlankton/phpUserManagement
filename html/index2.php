@@ -106,8 +106,7 @@ function get_routes(){
 	$prepared_statement = $pdo->prepare($query);
 	$prepared_statement->execute();
 	$results_assoc_array = $prepared_statement->fetchAll(PDO::FETCH_ASSOC);
-	
-	echo json_encode($results_assoc_array, JSON_PRETTY_PRINT);
+
 	return $results_assoc_array;
 }
 
@@ -118,6 +117,7 @@ function find_routes(){
 	function find($route)
 	{
 		global $uri;
+		$uri = $_GET['route'];
 		$pattern = $route['route_regexp'] ;
 		$f = preg_match("@$pattern@i", $uri);
 		if ($f == 1){
