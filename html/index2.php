@@ -138,7 +138,7 @@ function find_routes(){
 function get_route_var_count($route){
 	$matches = array();
 	$pMatch = preg_match("/\{\w+\}/g", $value, $matches);
-	return count($matches)
+	return count($matches);
 }
 
 function get_route_length($route){
