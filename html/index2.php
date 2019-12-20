@@ -97,7 +97,7 @@ function get_routes(){
     
 	$query = "
 		SELECT
-		    route, route_regexp, content-type
+		    `route`, `route_regexp`, `content-type`
 		FROM
 		    `Application`.`routes`
 	";
@@ -264,6 +264,7 @@ function load_routes(){
 }
 
 function setup_error_reporting(){
+	global $user_is_super;
 	
 	if ($user_is_super){
 		// Turn on Error Reporting For Super Users!
