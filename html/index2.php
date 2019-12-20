@@ -47,7 +47,35 @@
 	$uri = str_replace("?", "", $uri); //Remove "?" From URI;
 
 	/* Include the database connection file (remember to change the connection parameters) */
-	require '../../user_login_db.php';
+
+/* MySQL account username */
+$user = $_SESSION['user'] ?? $_POST['user'] ?? NULL ;
+
+/* MySQL account password */
+$passwd = $_SESSION['pw'] ?? $_POST['pw'] ?? NULL;
+
+/* The PDO object */
+$pdo = NULL;
+
+/* Connection string, or "data source name" */
+$dsn = "mysql:host=localhost;charset=UTF-8";
+
+/* Connection inside a try/catch block */
+try
+{  
+   /* PDO object creation */
+   $pdo = new PDO($dsn, $user,  $passwd, array(
+	    PDO::ATTR_PERSISTENT => true
+	));
+   
+   /* Enable exceptions on errors */
+   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}
+catch (PDOException $e)
+{
+   print "Error!: " . $e->getMessage() . "<br/>";
+   die();
+}
 
 	/* Include the Account class file */
 	require '../account_class.php';
