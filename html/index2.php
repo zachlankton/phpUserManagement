@@ -118,8 +118,8 @@ function find_routes(){
 	function find($route)
 	{
 		global $uri;
-		$pattern = $route['route_regexp'];
-		$f = preg_match("/$pattern/", $uri);
+		$pattern = '/' . $route['route_regexp'] . '/';
+		$f = preg_match($pattern, $uri);
 		if ($f == 1){
 			return $route;
 		}
