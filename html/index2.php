@@ -47,7 +47,7 @@
 	$user_is_super = false;
 	$user_info = NULL;
 	$user_roles = [];
-	get_user_roles();
+
 	get_user_info();
 
 
@@ -88,27 +88,6 @@
 		
 	}
 
-
-
-	function get_user_roles()
-	{
-		global $pdo;
-		global $user;
-		global $user_roles;
-		
-		try
-		{
-			$sth = $pdo->prepare("SELECT role FROM Application.`user_roles` WHERE user = :user ");
-			$sth->execute(array(':user'=> $user));
-			/* Fetch all of the remaining rows in the result set */
-			$user_roles = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
-		}catch (PDOException $e)
-		{
-			throw new Exception("Could not get User Roles.");
-		}
-
-	}
-
 	function get_user_info()
 	{
 		global $pdo;
@@ -121,9 +100,19 @@
 		
 		try
 		{
-			$sth = $pdo->prepare("SELECT 
-				account_name, account_reg_time, account_enabled, super_user
-				FROM `Users`.`accounts` WHERE account_name = :user ");
+			$sth = $pdo->prepare("
+				SELECT
+				    account_id AS `user_id`,
+				    account_name AS `user_name`,
+				    account_reg_time AS `registered_since`,
+				    account_enabled AS `user_enabled`,
+				    super_user AS `user_is_super`,
+				    group_concat(role) AS `roles`
+				FROM
+				    `Users`.`accounts`, `Application`.`user_roles`
+				WHERE
+				    account_name = :user AND user = :user
+			");
 			$sth->execute(array(':user'=> $user));
 			/* Fetch all of the remaining rows in the result set */
 			//$user_info = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
@@ -137,9 +126,10 @@
 		if (is_array($row))
 		{
 			/* Authentication succeeded. Set the class properties (id and name) and return TRUE*/
-			$user_id = intval($row['account_id'], 10);
-			$user_enabled = ($row['account_enabled'] == 1 ? true : false);
-			$user_is_super = ($row['super_user'] == 1 ? true : false);
+			$user_id = intval($row['user_id'], 10);
+			$user_enabled = ($row['user_enabled'] == 1 ? true : false);
+			$user_is_super = ($row['user_is_super'] == 1 ? true : false);
+			$user_roles = explode(",", $row['roles']);
 		}
 		
 		$user_info = [
