@@ -162,7 +162,7 @@ function super_user_routes_match(){
 	}
 
 	
-	$routes = find_routes()
+	$routes = find_routes();
 
 	// If there are no results then use $uri
 	$match_count = count($routes);
