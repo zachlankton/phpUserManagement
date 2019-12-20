@@ -58,7 +58,7 @@ $passwd = $_SESSION['pw'] ?? $_POST['pw'] ?? NULL;
 $pdo = NULL;
 
 /* Connection string, or "data source name" */
-$dsn = "mysql:host=localhost;charset=UTF-8";
+$dsn = "mysql:host=localhost;charset=utf8";
 
 /* Connection inside a try/catch block */
 try
