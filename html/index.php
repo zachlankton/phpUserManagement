@@ -196,20 +196,20 @@
 	}
 
 	function regular_user_routes_match(){
-		global $pdo;
-		global $uri;
-		global $route_match;
-		global $req_type;
-		global $user;
-		global $user_roles;
-		global $user_is_super;
-		$failed = FALSE;
-		$match = "";
-		$match_count = 0;
-
-
-
-
+		// REGULAR USER ROUTES
+		if ($uri == "/asdf") {
+			require "../routes/asdf.php";
+			die();
+		} elseif ( substr($uri, 0, 6) == "/couch" ) {
+			require "../routes/couch.php";
+			die();
+		} elseif (strpos($referer, "/couch") !== FALSE) {
+			require "../routes/couch.php";
+			die();
+		} elseif ($uri == "/getuser") {
+			require "../routes/getuser.php";
+			die();
+		}
 	}
 
 	function load_routes(){
