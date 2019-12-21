@@ -218,11 +218,11 @@
 		// REGULAR USER ROUTES
 		if ( substr($uri, 0, 6) == "/couch" ) {
 			$json_string = file_get_contents('php://input');
-			couch($uri, $req_type, $json_string);
+			couch($uri, $req_type, $json_string, false);
 			die();
 		} elseif (strpos($referer, "/couch") !== FALSE) {
 			$json_string = file_get_contents('php://input');
-			couch($uri, $req_type, $json_string);
+			couch($uri, $req_type, $json_string, false);
 			die();
 		} elseif ($uri == "/getuser") {
 			require "../routes/getuser.php";
@@ -519,7 +519,7 @@ function get_routes($uri){
 		}
 	}
 
-	function couch($uri, $req, $json_string){
+	function couch($uri, $req, $json_string, $return_arr = true){
 		// $json_string should come from php://input
 		// ie: $json_string = file_get_contents('php://input');
 		// or from json string: json_encode( array( 'include_docs' => 'true' ) )
@@ -566,8 +566,13 @@ function get_routes($uri){
 		curl_close($ch); 
 		
 		// Set Content Type and Respond!
-		header('Content-Type: '.$cType);
-		echo $output;
+		if ($return_arr){
+			return json_decode($output);
+		}else{
+			header('Content-Type: '.$cType);
+			echo $output;
+		}
+		
 	}
 		    
 ?>
