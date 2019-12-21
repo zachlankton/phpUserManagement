@@ -519,7 +519,7 @@ function get_routes($uri){
 		}
 	}
 
-	function couch($uri, $req, $json_string, $return_arr = true){
+	function couch($uri, $req, $json_string = "", $return_arr = true){
 		// $json_string should come from php://input
 		// ie: $json_string = file_get_contents('php://input');
 		// or from json string: json_encode( array( 'include_docs' => 'true' ) )
