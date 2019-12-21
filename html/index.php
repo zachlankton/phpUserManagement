@@ -92,6 +92,15 @@
 
 
 
+
+/*
+================================================================================================
+================================ FUNCTION DEFINITIONS ==========================================
+================================================================================================
+*/
+
+
+
 	function super_user_routes_match(){
 		global $uri;
 		global $route_match;
@@ -136,14 +145,12 @@
 
 	function check_permissions(){
 		global $pdo;
-		global $account;
 		global $uri;
 		global $route_match;
 		global $req_type;
 		global $user;
 		global $user_roles;
 		$failed = FALSE;
-		$match = "";
 		$match_count = 0;
 
 		// Find a Route that Matches the Requested URI
@@ -178,11 +185,16 @@
 			$err = "403 FORBIDDEN";
 		}
 		if ($failed) {
-			// Find a Route that Matches the Requested URI
+			// INSERT ACCESS FAILURE INTO DB
+			// This Helps Admin Determine Not Just What users are trying to access
+			// But What Permissions are Failing in the event that the access
+			// should be granted, then admins can quickly see what role the user
+			// should have and quickly adjust permissions to correct issues
 			$sth = $pdo->prepare("INSERT INTO `Application`.`access_error_log`(`error_type`, 
 				`user_name`, `uri_requested`, `request_type`, `role_required`, `route_match`, `match_count`) 
 				VALUES (:err,:user,:uri,:req_type,:role,:match,:count) ");
-				$values = array(
+			
+			$values = array(
 				':err'      => $err,
 				':user'     => $user,
 				':uri'      => $uri,
@@ -488,7 +500,9 @@ function get_routes($uri){
 	}
 
 	function admin_edit_icon(){
-	
+
+		global $user_is_super;
+		
 		// If we are a super user add a handy edit button in the lower right corner of the page.
 		if ($user_is_super){
 		?>
