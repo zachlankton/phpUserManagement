@@ -373,14 +373,14 @@ function get_routes(){
 		    `content-type`/*,
 		    LENGTH(
 			REGEXP_REPLACE(`route`, '\\{\\w+\\}', '')
-		    )*/ '1' AS `route_length`
+		    ) AS `route_length` */
 		FROM
 		    `Application`.`routes`
 		WHERE
 		    :uri RLIKE route_regexp
-		ORDER BY
+		/* ORDER BY
 		    `route_length`
-		DESC
+		DESC */
 	";
 
 	// USE PDO To Prepare The Query for Execution
