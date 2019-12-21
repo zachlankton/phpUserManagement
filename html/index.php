@@ -490,7 +490,7 @@ function get_routes($uri){
 	function admin_edit_icon(){
 	
 		// If we are a super user add a handy edit button in the lower right corner of the page.
-		if ($account->isSuper()){
+		if ($user_is_super){
 		?>
 			<script>
 			var d = document.createElement("div");
