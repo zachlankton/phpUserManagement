@@ -223,9 +223,15 @@
 
 	function load_routes(){
 		global $uri;
-		global $route_match;
-		echo $route_match;
-		die();
+		global $routes;
+		$route_match = $routes[0]['route'] ?? NULL;
+		if ($route_match == NULL){
+			http_response_code(404);
+			echo "URI: ".$uri."<br>";
+			echo "Route Not Found!";
+			die();
+		}
+		
 		$route_file_name = str_replace("/", "_", $route_match);
 		$route_file_name = str_replace(".*", ".", $route_file_name);
 		require("/var/www/routes/app_routes/$route_file_name");
