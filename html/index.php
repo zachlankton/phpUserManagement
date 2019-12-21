@@ -84,6 +84,8 @@
 	
 	load_routes();
 
+	admin_edit_icon();
+
 
 
 
@@ -483,6 +485,24 @@ function get_routes($uri){
 			echo "Successfully Logged Out!";
 			die();
 		}
-	}		    
+	}
+
+	function admin_edit_icon(){
+	
+		// If we are a super user add a handy edit button in the lower right corner of the page.
+		if ($account->isSuper()){
+		?>
+			<script>
+			var d = document.createElement("div");
+			var a = document.createElement("a");
+			a.href = "/edit" + location.pathname;
+			a.innerHTML = "✎";
+			d.append(a);
+			d.setAttribute("style", "position: fixed;height:30px;width:30px;bottom:0px;right:0px;background-color:yellow;text-align: center;font-size: 24px;");
+			document.body.append(d);
+			</script>
+		<?php
+		}
+	}
 		    
 ?>
