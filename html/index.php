@@ -349,11 +349,18 @@
 				    account_reg_time AS `registered_since`,
 				    account_enabled AS `user_enabled`,
 				    super_user AS `user_is_super`,
-				    group_concat(role) AS `roles`
+				    (
+				    SELECT
+					GROUP_CONCAT(role)
+				    FROM
+					`Application`.`user_roles`
+				    WHERE
+					USER = :user
+				) AS `roles`
 				FROM
-				    `Users`.`accounts`, `Application`.`user_roles`
+				    `Users`.`accounts`
 				WHERE
-				    account_name = :user AND user = :user
+				    account_name = :user
 			");
 			$sth->execute(array(':user'=> $user));
 			/* Fetch all of the remaining rows in the result set */
