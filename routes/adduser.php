@@ -1,6 +1,11 @@
 <?php 
 	global $pdo;
 
+	if ($_SERVER['HTTP_REFERER'] == 'https://erp2.mmpmg.com/login.html'){
+		require "../routes/adduser.html";
+		die();
+	}
+
 	if (!isset($_POST['user'])){
 		require "../routes/adduser.html";
 		die();
@@ -10,7 +15,7 @@
 	$pw = $_POST["pw"];
 	
 	$create_user_query = "CREATE USER '$user'@'localhost' IDENTIFIED BY '$pw'; ";
-	$insert_user_query = "INSERT INTO `Users`.`accounts`(`account_name`)VALUES('$user');"
+	$insert_user_query = "INSERT INTO `Users`.`accounts`(`account_name`)VALUES('$user'); ";
 	$grant_user_query = "GRANT SELECT ON `Users`.* TO '$user'@'localhost'; ";
 	$grant_app_query = "GRANT SELECT ON `Application`.* TO '$user'@'localhost'; ";
 	try
