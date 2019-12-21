@@ -37,13 +37,13 @@
 	// START SESSION
 	session_start();
 
-	check_logout();
-
 	// CAPTURE REQUESTED URI
 	$uri = $_SERVER["REQUEST_URI"];
 	$query_str = $_SERVER["QUERY_STRING"];
 	$uri = str_replace($query_str, "", $uri);
 	$uri = str_replace("?", "", $uri); //Remove "?" From URI;
+
+	check_logout();
 
 	// global db connection object
 	$pdo = NULL;
