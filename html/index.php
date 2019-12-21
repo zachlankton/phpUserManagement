@@ -225,7 +225,7 @@
 		global $uri;
 		global $route_match;
 		echo $route_match;
-		die()
+		die();
 		$route_file_name = str_replace("/", "_", $route_match);
 		$route_file_name = str_replace(".*", ".", $route_file_name);
 		require("/var/www/routes/app_routes/$route_file_name");
