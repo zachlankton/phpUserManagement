@@ -377,7 +377,7 @@ function get_routes(){
 		FROM
 		    `Application`.`routes`
 		WHERE
-		    :uri RLIKE `route_regexp`
+		    :uri RLIKE route_regexp
 		ORDER BY
 		    `route_length`
 		DESC
