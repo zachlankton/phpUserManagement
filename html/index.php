@@ -77,8 +77,8 @@
 
 	// find a matching route
 	$routes 	= get_routes();
-	$route_match 	= "";
-	$route_vars 	= array();
+	$route_match 	= $routes[0]['route'];
+	$route_vars 	= get_route_vars();
 	$req_type 	= $_SERVER['REQUEST_METHOD'];
 	$referer 	= isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "";
 	
@@ -97,69 +97,78 @@
 
 
 
-function super_user_routes_match(){
-	global $uri;
-	global $route_match;
-	global $req_type;
-	global $user;
-	global $user_roles;
-	global $user_is_super;
-	global $routes;
-	
-	$match = "";
-	$match_count = 0;
-	
+	function super_user_routes_match(){
+		global $uri;
+		global $route_match;
+		global $req_type;
+		global $user;
+		global $user_roles;
+		global $user_is_super;
+		global $routes;
+
+		$match = "";
+		$match_count = 0;
 
 
-	// match these static routes first
-	switch ($uri) {
-		case "/addUser":
-			require "../routes/adduser.php";
-			die();
-		case "/editUser":
-			require "../routes/editUser.php";
-			die();
-		case "/getUserByName":
-			require "../routes/getUserByName.php";
-			die();
-		case "/users":
-			require "../routes/users.php";
-			die();
-		case "/admin":
-			require "../routes/admin.php";
-			die();
+
+		// match these static routes first
+		switch ($uri) {
+			case "/addUser":
+				require "../routes/adduser.php";
+				die();
+			case "/editUser":
+				require "../routes/editUser.php";
+				die();
+			case "/getUserByName":
+				require "../routes/getUserByName.php";
+				die();
+			case "/users":
+				require "../routes/users.php";
+				die();
+			case "/admin":
+				require "../routes/admin.php";
+				die();
+		}
+
+		// If there are no results then use $uri
+		$match_count = count($routes);
+		if ($match_count == 0){
+			$route_match = $uri;
+		}else{
+			$route_match = $routes[0]['route'];
+		}
 	}
 
-	// If there are no results then use $uri
-	$match_count = count($routes);
-	if ($match_count == 0){
-		$route_match = $uri;
-	}else{
-		$route_match = $routes[0]['route'];
-	}
-}
+	function regular_user_routes_match(){
+		global $pdo;
+		global $uri;
+		global $route_match;
+		global $req_type;
+		global $user;
+		global $user_roles;
+		global $user_is_super;
+		$failed = FALSE;
+		$match = "";
+		$match_count = 0;
 
-function regular_user_routes_match(){
-	global $pdo;
-	global $uri;
-	global $route_match;
-	global $req_type;
-	global $user;
-	global $user_roles;
-	global $user_is_super;
-	$failed = FALSE;
-	$match = "";
-	$match_count = 0;
-	
-	
-  
-  
-}
+
+
+
+	}
 
 	function load_routes(){
 		global $uri;
 		global $route_match;
+		
+		$route_file_name = str_replace("/", "_", $route_match);
+		$route_file_name = str_replace(".*", ".", $route_file_name);
+		require("/var/www/routes/app_routes/$route_file_name");
+	}
 
+	function get_route_vars(){
+		global $uri;
+		global $route_match;
+		
 		// PARSE ANY ROUTE VARIABLES INTO AN ASSOC ARRAY (OBJECT)
 		$route_vars = [];
 		$uri_split = explode("/", $uri);
@@ -173,10 +182,8 @@ function regular_user_routes_match(){
 				$route_vars[$matches[1]] = $uri_split[$key];
 			}   
 		}
-
-		$route_file_name = str_replace("/", "_", $route);
-		$route_file_name = str_replace(".*", ".", $route_file_name);
-		require("/var/www/routes/app_routes/$route_file_name");
+		
+		return $route_vars;
 	}
 
 	function setup_error_reporting(){
