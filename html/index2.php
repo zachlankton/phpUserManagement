@@ -383,7 +383,7 @@ function get_routes(){
 
 	// USE PDO To Prepare The Query for Execution
 	$prepared_statement = $pdo->prepare($query);
-	$prepared_statement->execute( [$uri] );
+	$prepared_statement->execute( array( ':uri' => $uri ) );
 	$results_assoc_array = $prepared_statement->fetchAll(PDO::FETCH_ASSOC);
 
 	return $results_assoc_array;
