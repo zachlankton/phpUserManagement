@@ -372,7 +372,7 @@ function get_routes(){
 		    `route_regexp`,
 		    `content-type`,
 		    LENGTH(
-			REGEXP_REPLACE(`route`, '\{\w+\}', '')
+			REGEXP_REPLACE(`route`, :r_len_regex, '')
 		    ) AS `route_length` 
 		FROM
 		    `Application`.`routes`
@@ -385,7 +385,7 @@ function get_routes(){
 
 	// USE PDO To Prepare The Query for Execution
 	$prepared_statement = $pdo->prepare($query);
-	$prepared_statement->execute( array( ':uri' => $uri ) );
+	$prepared_statement->execute( array( ':uri' => $uri, ':r_len_regex' => '\\{\\w+\\}' ) );
 	$results_assoc_array = $prepared_statement->fetchAll(PDO::FETCH_ASSOC);
 
 	return $results_assoc_array;
