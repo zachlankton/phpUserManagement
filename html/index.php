@@ -87,8 +87,7 @@
 	}
 
 	regular_user_routes_match();
-	echo "test";
-	die();
+	
 	load_routes();
 
 
