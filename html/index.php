@@ -37,6 +37,8 @@
 	// START SESSION
 	session_start();
 
+	check_logout();
+
 	// CAPTURE REQUESTED URI
 	$uri = $_SERVER["REQUEST_URI"];
 	$query_str = $_SERVER["QUERY_STRING"];
@@ -62,16 +64,6 @@
 
 	// Composer Autoload
 	require './vendor/autoload.php';
-
-	// IF USER IS AUTHENTICATED AND REQUESTING LOGOUT
-	if ($uri == '/logout'){
-		$_SESSION = array();
-		session_destroy();
-		setcookie(session_name(),'',0,'/');
-    		session_regenerate_id(true);
-		echo "Successfully Logged Out!";
-		die();
-	}
 
 	setup_error_reporting();
 
@@ -466,6 +458,18 @@ function get_routes($uri){
 
 	return $results_assoc_array;
 }
-		    
+
+
+	function check_logout(){
+		// IF USER IS AUTHENTICATED AND REQUESTING LOGOUT
+		if ($uri == '/logout'){
+			$_SESSION = array();
+			session_destroy();
+			setcookie(session_name(),'',0,'/');
+			session_regenerate_id(true);
+			echo "Successfully Logged Out!";
+			die();
+		}
+	}		    
 		    
 ?>
