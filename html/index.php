@@ -369,7 +369,7 @@
 			//$user_info = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
 		}catch (PDOException $e)
 		{
-			throw new Exception("Could not get User Roles.");
+			echo $e->getMessage();
 		}
 		
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
