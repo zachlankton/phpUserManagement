@@ -138,8 +138,8 @@
 		global $uri;
 		global $route_match;
 		global $req_type;
-		$user = $account->getName();
-		$roles = $account->getUserRoles();
+		global $user;
+		global $user_roles;
 		$failed = FALSE;
 		$match = "";
 		$match_count = 0;
@@ -165,33 +165,32 @@
 		// Check if the User Has the Appropriate Role to Access The Requested Resource
 		// If not then issue 403 Forbidden!
 		$role = $routes[0]['role'];
-		$match = $routes[0]['route'];
-		$route_match = $match;
-		if (!$failed && !in_array($role, $roles)) {
-		http_response_code(403);
-		echo "URI: ".$uri."<br>";
-		echo "Request Type: " . $req_type . "<br>";
-		echo "User Forbidden to Access This Resource! <br>";
-		echo $role . " Role Required ";
-		$failed = TRUE;
-		$err = "403 FORBIDDEN";
+		
+		if (!$failed && !in_array($role, $user_roles)) {
+			http_response_code(403);
+			echo "URI: ".$uri."<br>";
+			echo "Request Type: " . $req_type . "<br>";
+			echo "User Forbidden to Access This Resource! <br>";
+			echo $role . " Role Required ";
+			$failed = TRUE;
+			$err = "403 FORBIDDEN";
 		}
 		if ($failed) {
-		// Find a Route that Matches the Requested URI
-		$sth = $pdo->prepare("INSERT INTO `Application`.`access_error_log`(`error_type`, 
-		`user_name`, `uri_requested`, `request_type`, `role_required`, `route_match`, `match_count`) 
-		VALUES (:err,:user,:uri,:req_type,:role,:match,:count) ");
-		$values = array(
-		':err'      => $err,
-		':user'     => $user,
-		':uri'      => $uri,
-		':req_type' => $req_type,
-		':role'     => $role,
-		':match'    => $match,
-		':count'    => $match_count
-		);
-		$sth->execute( $values );
-		die();
+			// Find a Route that Matches the Requested URI
+			$sth = $pdo->prepare("INSERT INTO `Application`.`access_error_log`(`error_type`, 
+				`user_name`, `uri_requested`, `request_type`, `role_required`, `route_match`, `match_count`) 
+				VALUES (:err,:user,:uri,:req_type,:role,:match,:count) ");
+				$values = array(
+				':err'      => $err,
+				':user'     => $user,
+				':uri'      => $uri,
+				':req_type' => $req_type,
+				':role'     => $role,
+				':match'    => $route_match,
+				':count'    => $match_count
+			);
+			$sth->execute( $values );
+			die();
 		}
 		
 	}
