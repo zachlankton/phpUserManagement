@@ -196,6 +196,10 @@
 	}
 
 	function regular_user_routes_match(){
+		
+		global $uri;
+		global $referer;
+		
 		// REGULAR USER ROUTES
 		if ($uri == "/asdf") {
 			require "../routes/asdf.php";
