@@ -212,17 +212,17 @@
 	function regular_user_routes_match(){
 		
 		global $uri;
+		global $req_type;
 		global $referer;
 		
 		// REGULAR USER ROUTES
-		if ($uri == "/asdf") {
-			require "../routes/asdf.php";
-			die();
-		} elseif ( substr($uri, 0, 6) == "/couch" ) {
-			require "../routes/couch.php";
+		if ( substr($uri, 0, 6) == "/couch" ) {
+			$json_string = file_get_contents('php://input');
+			couch($uri, $req_type, $json_string);
 			die();
 		} elseif (strpos($referer, "/couch") !== FALSE) {
-			require "../routes/couch.php";
+			$json_string = file_get_contents('php://input');
+			couch($uri, $req_type, $json_string);
 			die();
 		} elseif ($uri == "/getuser") {
 			require "../routes/getuser.php";
@@ -517,6 +517,57 @@ function get_routes($uri){
 			</script>
 		<?php
 		}
+	}
+
+	function couch($uri, $req, $json_string){
+		// $json_string should come from php://input
+		// ie: $json_string = file_get_contents('php://input');
+		// or from json string: json_encode( array( 'include_docs' => 'true' ) )
+		
+		// if this request is for adding an admin then do nothing
+		if (strpos($uri, "/couch/_node/couchdb@127.0.0.1/_config/admins/") !== FALSE){
+			die();
+		}
+		
+		// if this uri contains "/couch" then strip it for forward to couchdb server
+		if (substr($uri, 0, 6) == "/couch"){
+			$uri = substr($uri, 6);
+		}
+		
+		// create curl resource
+		$ch = curl_init();
+		
+		// set url
+		curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:5984/".$uri);
+		
+		//return the transfer as a string
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		
+		// Set Request Type (GET, POST, PUT, DELETE)
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $req);
+
+		// Set Payload
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string); 
+
+		// Set Content Type and Length
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
+			'Content-Type: application/json',                                                                                
+			'Content-Length: ' . strlen($json_string))                                                                       
+		);    
+
+
+		// $output contains the output string
+		$output = curl_exec($ch);
+		
+		// get Response Type From Couch
+		$cType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+		
+		// close curl resource to free up system resources
+		curl_close($ch); 
+		
+		// Set Content Type and Respond!
+		header('Content-Type: '.$cType);
+		echo $output;
 	}
 		    
 ?>
