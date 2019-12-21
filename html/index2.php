@@ -370,10 +370,10 @@ function get_routes(){
 		SELECT
 		    `route`,
 		    `route_regexp`,
-		    `content-type`,
+		    `content-type`/*,
 		    LENGTH(
 			REGEXP_REPLACE(`route`, '\\{\\w+\\}', '')
-		    ) AS `route_length`
+		    ) AS `route_length`*/
 		FROM
 		    `Application`.`routes`
 		WHERE
