@@ -88,7 +88,7 @@
 
 	regular_user_routes_match();
 	
-	echo json_encode($route, JSON_PRETTY_PRINT);
+	echo json_encode($routes, JSON_PRETTY_PRINT);
 	die;
 
 	load_routes();
