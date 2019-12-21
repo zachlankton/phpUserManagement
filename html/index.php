@@ -461,6 +461,9 @@ function get_routes($uri){
 
 
 	function check_logout(){
+		
+		global $uri;
+		
 		// IF USER IS AUTHENTICATED AND REQUESTING LOGOUT
 		if ($uri == '/logout'){
 			$_SESSION = array();
