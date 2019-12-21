@@ -32,5 +32,5 @@
 		die();
 	}
 	
-	echo $newId;
+	echo "Successfully Added New User $user";
 ?>
