@@ -77,7 +77,7 @@
 
 	// find a matching route
 	$routes 	= get_routes($uri);
-	$route_match 	= $routes[0]['route'];
+	$route_match 	= $routes[0]['route'] ?? $uri;
 	$route_vars 	= get_route_vars();
 	$req_type 	= $_SERVER['REQUEST_METHOD'];
 	$referer 	= isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "";
