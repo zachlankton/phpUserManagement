@@ -76,7 +76,7 @@
 	setup_error_reporting();
 
 	// find a matching route
-	$routes 	= get_routes();
+	$routes 	= get_routes($uri);
 	$route_match 	= $routes[0]['route'];
 	$route_vars 	= get_route_vars();
 	$req_type 	= $_SERVER['REQUEST_METHOD'];
@@ -335,7 +335,7 @@ function include_route($uri, $ir_options = NULL)
 	global $query_str; // Query String Component of URL (ie: ?test=hello)
 	global $account; // User Account Class
     
-	$routes = find_routes($uri);
+	$routes = get_routes($uri);
     // If there are no results then use $uri
     $match_count = count($routes);
     if ($match_count == 0)
@@ -366,9 +366,8 @@ function include_route($uri, $ir_options = NULL)
 
 
 
-function get_routes(){
+function get_routes($uri){
 	global $pdo;
-    	global $uri;
 	
 	$query = "
 		SELECT
