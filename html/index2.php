@@ -76,7 +76,7 @@
 	setup_error_reporting();
 
 	// find a matching route
-	$routes = get_routes();
+	$routes 	= get_routes();
 	$route_match 	= "";
 	$route_vars 	= array();
 	$req_type 	= $_SERVER['REQUEST_METHOD'];
@@ -84,84 +84,18 @@
 	
 	if ($user_is_super){
 		super_user_routes_match();
-	}else{
-		regular_user_routes_match();
 	}
+
+	regular_user_routes_match();
+	
 
 	load_routes();
 
 
 
-function get_routes(){
-	global $pdo;
-    
-	$query = "
-		SELECT
-		    `route`, `route_regexp`, `content-type`
-		FROM
-		    `Application`.`routes`
-	";
 
-	// USE PDO To Prepare The Query for Execution
-	$prepared_statement = $pdo->prepare($query);
-	$prepared_statement->execute();
-	$results_assoc_array = $prepared_statement->fetchAll(PDO::FETCH_ASSOC);
 
-	return $results_assoc_array;
-}
 
-function find_routes(){
-	global $routes;
-	global $uri;
-	
-	function find($route)
-	{
-		global $uri;
-		$uri = $_GET['route'];
-		$pattern = $route['route_regexp'] ;
-		$f = preg_match("@$pattern@i", $uri);
-		if ($f == 1){
-			$route_file_name = str_replace("/", "_", $route['route']);
-    			$route['route_file_name'] = str_replace(".*", ".", $route_file_name);
-			$route['route_length'] = get_route_length($route['route']);
-			return $route;
-		} else {
-			return false;
-		}
-	}
-
-	$found_routes = [];
-	foreach ($routes as $key => $value){
-		$f = find($value);
-		if ($f !== false){
-			$found_routes[] = $f;
-		}
-	}
-	
-	// Sort Results so the best Matched Route is First.
-	$route_len = array_column($found_routes, 'route_length');
-	array_multisort($route_len, SORT_DESC, $found_routes);
-
-	echo json_encode($found_routes, JSON_PRETTY_PRINT);
-	die();
-	return found_routes;
-}
-
-function get_route_length($route){
-	$route_split = explode("/", $route);
-	$route_minus_vars = "";
-
-	foreach ($route_split as $key => $value) {
-		$matches = array();
-		$pMatch = preg_match("/^\{([\w]+)\}$/", $value, $matches);
-
-		if ($pMatch === 0){
-			$route_minus_vars .= $value;
-		}   
-	}
-	
-	return strlen($route_minus_vars);
-}
 
 function super_user_routes_match(){
 	global $uri;
@@ -170,6 +104,7 @@ function super_user_routes_match(){
 	global $user;
 	global $user_roles;
 	global $user_is_super;
+	global $routes;
 	
 	$match = "";
 	$match_count = 0;
@@ -195,9 +130,6 @@ function super_user_routes_match(){
 			die();
 	}
 
-	
-	$routes = find_routes();
-
 	// If there are no results then use $uri
 	$match_count = count($routes);
 	if ($match_count == 0){
@@ -205,8 +137,6 @@ function super_user_routes_match(){
 	}else{
 		$route_match = $routes[0]['route'];
 	}
-	return 0;
-	
 }
 
 function regular_user_routes_match(){
@@ -226,52 +156,52 @@ function regular_user_routes_match(){
   
 }
 
-function load_routes(){
-	global $uri;
-	global $route_match;
-	
-	// PARSE ANY ROUTE VARIABLES INTO AN ASSOC ARRAY (OBJECT)
-	$route_vars = [];
-	$uri_split = explode("/", $uri);
-	$route_split = explode("/", $route_match);
+	function load_routes(){
+		global $uri;
+		global $route_match;
 
-	foreach ($route_split as $key => $value) {
-		$matches = array();
-		$pMatch = preg_match("/^\{([\w]+)\}$/", $value, $matches);
+		// PARSE ANY ROUTE VARIABLES INTO AN ASSOC ARRAY (OBJECT)
+		$route_vars = [];
+		$uri_split = explode("/", $uri);
+		$route_split = explode("/", $route_match);
 
-		if ($pMatch){
-			$route_vars[$matches[1]] = $uri_split[$key];
-		}   
+		foreach ($route_split as $key => $value) {
+			$matches = array();
+			$pMatch = preg_match("/^\{([\w]+)\}$/", $value, $matches);
+
+			if ($pMatch){
+				$route_vars[$matches[1]] = $uri_split[$key];
+			}   
+		}
+
+		$route_file_name = str_replace("/", "_", $route);
+		$route_file_name = str_replace(".*", ".", $route_file_name);
+		require("/var/www/routes/app_routes/$route_file_name");
 	}
-	
-	$route_file_name = str_replace("/", "_", $route);
-    	$route_file_name = str_replace(".*", ".", $route_file_name);
-    	require("/var/www/routes/app_routes/$route_file_name");
-}
 
-function setup_error_reporting(){
-	global $user_is_super;
-	
-	if ($user_is_super){
-		// Turn on Error Reporting For Super Users!
-		$whoops = new \Whoops\Run;
-		$handler = new \Whoops\Handler\PrettyPageHandler;
-		$handler->setEditor(function($file, $line) {
-			if (strpos($file, "/var/www/routes/app_routes") > -1){
-				$uri = str_replace("/var/www/routes/app_routes/", "", $file);
-				$uri = str_replace("_", "/", $uri);
-				$uri = str_replace(".", ".*", $uri);
-				return "https://erp2.mmpmg.com/edit$uri";
-			} else {
-				$uri = str_replace("/var/www", "", $file);
-				return "https://github.com/zachlankton/phpUserManagement/blob/master$uri";
-			}
-		});
-		$whoops->prependHandler($handler);
-		$whoops->register();
+	function setup_error_reporting(){
+		global $user_is_super;
+
+		if ($user_is_super){
+			// Turn on Error Reporting For Super Users!
+			$whoops = new \Whoops\Run;
+			$handler = new \Whoops\Handler\PrettyPageHandler;
+			$handler->setEditor(function($file, $line) {
+				if (strpos($file, "/var/www/routes/app_routes") > -1){
+					$uri = str_replace("/var/www/routes/app_routes/", "", $file);
+					$uri = str_replace("_", "/", $uri);
+					$uri = str_replace(".", ".*", $uri);
+					return "https://erp2.mmpmg.com/edit$uri";
+				} else {
+					$uri = str_replace("/var/www", "", $file);
+					return "https://github.com/zachlankton/phpUserManagement/blob/master$uri";
+				}
+			});
+			$whoops->prependHandler($handler);
+			$whoops->register();
+		}
+
 	}
-	
-}
 
 	function authenticate_session(){
 		
@@ -394,18 +324,12 @@ function setup_error_reporting(){
 
 function include_route($uri, $ir_options = NULL)
 {
-    global $req_type; //request type, ie: GET, POST, PUT, DELETE, etc...
-    global $pdo; // Database Connection
-    global $query_str; // Query String Component of URL (ie: ?test=hello)
-    global $account; // User Account Class
-    $sth = $pdo->prepare("
-      SELECT * FROM Application.`routes` 
-      WHERE :uri RLIKE route_regexp 
-      ORDER BY `routes`.`route` DESC ");
-    $sth->execute(array(
-        ':uri' => $uri
-    ));
-    $routes = $sth->fetchAll(PDO::FETCH_ASSOC);
+	global $req_type; //request type, ie: GET, POST, PUT, DELETE, etc...
+	global $pdo; // Database Connection
+	global $query_str; // Query String Component of URL (ie: ?test=hello)
+	global $account; // User Account Class
+    
+	$routes = find_routes($uri);
     // If there are no results then use $uri
     $match_count = count($routes);
     if ($match_count == 0)
@@ -432,6 +356,37 @@ function include_route($uri, $ir_options = NULL)
     $route_file_name = str_replace("/", "_", $route_match);
     $route_file_name = str_replace(".*", ".", $route_file_name);
     require ("/var/www/routes/app_routes/$route_file_name");
+}
+
+
+
+function get_routes(){
+	global $pdo;
+    	global $uri;
+	
+	$query = "
+		SELECT
+		    `route`,
+		    `route_regexp`,
+		    `content-type`,
+		    LENGTH(
+			REGEXP_REPLACE(`route`, '\\{\\w+\\}', '')
+		    ) AS `route_length`
+		FROM
+		    `Application`.`routes`
+		WHERE
+		    :uri RLIKE `route_regexp`
+		ORDER BY
+		    `route_length`
+		DESC
+	";
+
+	// USE PDO To Prepare The Query for Execution
+	$prepared_statement = $pdo->prepare($query);
+	$prepared_statement->execute( [$uri] );
+	$results_assoc_array = $prepared_statement->fetchAll(PDO::FETCH_ASSOC);
+
+	return $results_assoc_array;
 }
 		    
 		    
