@@ -450,7 +450,10 @@ function include_route($uri, $ir_options = NULL)
     }
     $route_file_name = str_replace("/", "_", $route_match);
     $route_file_name = str_replace(".*", ".", $route_file_name);
+	
+	echo "<a begin include_route href=\"$route_match\" style=\"display:none;\">Begin Include Route $route_match</a>";
     require ("/var/www/routes/app_routes/$route_file_name");
+	echo "<a end include_route href=\"$route_match\" style=\"display:none;\">End Include Route $route_match</a>";
 }
 
 
