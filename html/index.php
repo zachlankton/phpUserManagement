@@ -400,11 +400,22 @@
 		}
 		
 		$user_info = [
-			'user_name' 	=> $user,
-			'user_id'	=> $user_id,
-			'user_is_super'	=> $user_is_super,
-			'user_enabled' 	=> $user_enabled,
-			'roles'		=> $user_roles
+			'user_name' 		=> $user,
+			'user_id'		=> $user_id,
+			'user_is_super'		=> $user_is_super,
+			'user_enabled' 		=> $user_enabled,
+			'first_name'		=> $row['first_name'],
+			'middle_name'		=> $row['middle_name'],
+			'last_name'		=> $row['last_name'],
+			'phone'			=> $row['phone'],
+			'mobile_phone'		=> $row['mobile_phone'],
+			'address'		=> $row['address'],
+			'email'			=> $row['email'],
+			'emergency_contact'	=> $row['emergency_contact'],
+			'emergency_phone'	=> $row['emergency_phone'],
+			'birthday'		=> $row['birthday'],
+			'hire_date'		=> $row['hire_date'],
+			'roles'			=> $user_roles
 		];
 		
 		$_SESSION['user_id'] = $user_id;
