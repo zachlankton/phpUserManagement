@@ -377,7 +377,7 @@
 				    `emergency_contact`,
 				    `emergency_phone`,
 				    `birthday`,
-				    `hire_date`
+				    `hire_date`,
 				    (
 				    SELECT
 					GROUP_CONCAT(role)
