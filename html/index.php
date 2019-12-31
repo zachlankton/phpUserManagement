@@ -367,6 +367,17 @@
 				    account_reg_time AS `registered_since`,
 				    account_enabled AS `user_enabled`,
 				    super_user AS `user_is_super`,
+				    `first_name`,
+				    `middle_name`,
+				    `last_name`,
+				    `phone`,
+				    `address`,
+				    `mobile_phone`,
+				    `email`,
+				    `emergency_contact`,
+				    `emergency_phone`,
+				    `birthday`,
+				    `hire_date`
 				    (
 				    SELECT
 					GROUP_CONCAT(role)
