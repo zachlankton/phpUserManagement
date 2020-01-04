@@ -591,6 +591,10 @@ function get_routes($uri){
 			header("Content-Type: text/event-stream");
 			$callback = function ($ch, $str) {
 				echo $str;
+				while (ob_get_level() > 0) {
+				    ob_end_flush();
+				}
+				    flush();
 				return strlen($str);//return the exact length
 			    };
 			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $callback);
