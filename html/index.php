@@ -214,15 +214,16 @@
 		global $uri;
 		global $req_type;
 		global $referer;
+		global $query_str;
 		
 		// REGULAR USER ROUTES
 		if ( substr($uri, 0, 6) == '/couch' ) {
 			$json_string = file_get_contents('php://input');
-			couch($uri, $req_type, $json_string, false);
+			couch($uri.'?'.$query_str, $req_type, $json_string, false);
 			die();
 		} elseif ( substr($referer, 0, 28) == 'https://erp2.mmpmg.com/couch') {
 			$json_string = file_get_contents('php://input');
-			couch($uri, $req_type, $json_string, false);
+			couch($uri.'?'.$query_str, $req_type, $json_string, false);
 			die();
 		} elseif ($uri == "/getuser") {
 			require "../routes/getuser.php";
