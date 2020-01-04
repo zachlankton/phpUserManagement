@@ -571,23 +571,12 @@ function get_routes($uri){
 		
 		// set url
 		curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:5984/".$uri);
-		
-		//return the transfer as a string
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		
-		// Set Request Type (GET, POST, PUT, DELETE)
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $req);
-
-		// Set Payload
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string); 
-
-		// Set Content Type and Length
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-			'Content-Type: application/json',                                                                                
-			'Content-Length: ' . strlen($json_string))                                                                       
-		);    
 
 		if (strpos($uri, '/_changes') !== FALSE){
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
+				'Content-Type: text/event-stream'
+				)                                                                       
+			);  
 			header("Content-Type: text/event-stream");
 			$callback = function ($ch, $str) {
 				echo $str;
@@ -602,6 +591,21 @@ function get_routes($uri){
 			curl_close($ch);
 		}else{
 
+			//return the transfer as a string
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+			// Set Request Type (GET, POST, PUT, DELETE)
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $req);
+
+			// Set Payload
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string); 
+
+			// Set Content Type and Length
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
+				'Content-Type: application/json',                                                                                
+				'Content-Length: ' . strlen($json_string))                                                                       
+			);    
+			
 			// $output contains the output string
 			$output = curl_exec($ch);
 
