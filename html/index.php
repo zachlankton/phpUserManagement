@@ -587,24 +587,35 @@ function get_routes($uri){
 			'Content-Length: ' . strlen($json_string))                                                                       
 		);    
 
-
-		// $output contains the output string
-		$output = curl_exec($ch);
-		
-		// get Response Type From Couch
-		$cType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-		
-		// close curl resource to free up system resources
-		curl_close($ch); 
-		
-		// Set Content Type and Respond!
-		if ($return_arr){
-			return json_decode($output);
+		if (strpos($uri, '/_changes') !== FALSE){
+			header("Content-Type: text/event-stream");
+			$callback = function ($ch, $str) {
+				echo $str;
+				return strlen($str);//return the exact length
+			    };
+			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $callback);
+			curl_exec($ch);
+			curl_close($ch);
 		}else{
-			header('Content-Type: '.$cType);
-			echo $output;
+
+			// $output contains the output string
+			$output = curl_exec($ch);
+
+			// get Response Type From Couch
+			$cType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+
+			// close curl resource to free up system resources
+			curl_close($ch); 
+
+			// Set Content Type and Respond!
+			if ($return_arr){
+				return json_decode($output);
+			}else{
+				header('Content-Type: '.$cType);
+				echo $output;
+				die();
+			}
 		}
-		
 	}
 		    
 ?>
