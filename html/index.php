@@ -56,6 +56,8 @@
 	$user_is_super 	= $_SESSION['user_is_super'] 	?? false;
 	$user_roles 	= $_SESSION['user_roles'] 	?? [];
 	$user_info 	= $_SESSION['user_info'] 	?? get_user_info();
+	
+	session_write_close();
 
 	if ($user_enabled == false){
 		echo "User is Disabled!";
