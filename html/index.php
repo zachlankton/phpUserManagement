@@ -521,9 +521,13 @@ function get_routes($uri){
 	function check_logout(){
 		
 		global $uri;
+		global $pdo;
+		global $user
 		
 		// IF USER IS AUTHENTICATED AND REQUESTING LOGOUT
 		if ($uri == '/logout'){
+			$results = $pdo->query("select id from information_schema.processlist where user='$user'; ");
+			var_dump($results);
 			$_SESSION = array();
 			session_destroy();
 			setcookie(session_name(),'',0,'/');
