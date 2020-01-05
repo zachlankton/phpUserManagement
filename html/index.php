@@ -526,8 +526,6 @@ function get_routes($uri){
 		
 		// IF USER IS AUTHENTICATED AND REQUESTING LOGOUT
 		if ($uri == '/logout'){
-			$results = $pdo->query("select id from information_schema.processlist where user='$user'; ");
-
 			$_SESSION = array();
 			session_destroy();
 			setcookie(session_name(),'',0,'/');
