@@ -26,6 +26,7 @@
 		$guq = $pdo->query($grant_user_query);
 		$gaq = $pdo->query($grant_app_query);
 		$gel = $pdo->query($grant_err_log);
+		couch("/userdb_$user", "PUT");
 		
 	}
 	catch (Exception $e)
