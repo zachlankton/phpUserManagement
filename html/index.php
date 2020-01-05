@@ -154,6 +154,13 @@
 		global $user_roles;
 		$failed = FALSE;
 		$match_count = 0;
+		
+		$userdb = "/couch/userdb_$user";
+		if (strpos($uri, $userdb == 0){
+			// user is trying to access their own db
+			// we can end here
+			return 0;
+		}
 
 		// Find a Route that Matches the Requested URI
 		$sth = $pdo->prepare("
