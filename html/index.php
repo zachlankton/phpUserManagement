@@ -530,7 +530,7 @@ function get_routes($uri){
 			session_destroy();
 			setcookie(session_name(),'',0,'/');
 			session_regenerate_id(true);
-			echo "Successfully Logged Out!  <br> <a href="/">Login</a>";
+			echo "Successfully Logged Out!  <br> <a href='/'>Login</a>";
 			die();
 		}
 	}
