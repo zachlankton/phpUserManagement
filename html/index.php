@@ -321,6 +321,13 @@
 		/* Connection string, or "data source name" */
 		$dsn = "mysql:host=localhost;charset=utf8";
 
+		
+		if ($user == "local_request" && 
+		    $_SERVER['REMOTE_ADDR'] != "142.44.147.12"){
+			echo "User Not Allowed for Remote Connections!";
+			die();
+		}
+		
 		// if no user set then record requested URI and 
 		// redirect to login screen
 		if ($user == NULL){
