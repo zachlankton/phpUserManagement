@@ -374,6 +374,8 @@
 		global $user_roles;
 		
 		if ($user == "local_request"){
+			$user_enabled = true;
+			$user_is_super = true;
 			$_SESSION['user_id'] = "local_request";
 			$_SESSION['user_enabled'] = true;
 			$_SESSION['user_is_super'] = true;
