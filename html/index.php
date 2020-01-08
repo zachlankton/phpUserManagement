@@ -324,7 +324,7 @@
 		
 		if ($user == "local_request" && 
 		    $_SERVER['REMOTE_ADDR'] != "142.44.147.12"){
-			echo "User Not Allowed for Remote Connections!";
+			echo "Login Failed!";
 			die();
 		}
 		
