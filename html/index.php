@@ -243,11 +243,15 @@
 	function load_routes(){
 		global $uri;
 		global $routes;
+		global $user_is_super;
 		$route_match = $routes[0]['route'] ?? NULL;
 		if ($route_match == NULL){
 			http_response_code(404);
 			echo "URI: ".$uri."<br>";
-			echo "Route Not Found!";
+			echo "Route Not Found! <br>";
+			if ($user_is_super){
+				echo "<a href='/edit/$uri'>Create Route</a>";
+			}
 			die();
 		}
 		
