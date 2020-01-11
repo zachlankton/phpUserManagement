@@ -250,7 +250,7 @@
 			echo "URI: ".$uri."<br>";
 			echo "Route Not Found! <br>";
 			if ($user_is_super){
-				echo "<a href='/edit/$uri'>Create Route</a>";
+				echo "<a href='/edit{$uri}'>Create Route</a>";
 			}
 			die();
 		}
