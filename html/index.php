@@ -647,7 +647,7 @@ function get_routes($uri){
 				// get Response Type From Couch
 				$cType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 				header('Content-Type: '.$cType);
-			}
+			};
 			curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_cb);
 			
 			$callback = function ($ch, $str) {
