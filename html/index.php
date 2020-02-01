@@ -628,8 +628,8 @@ function get_routes($uri){
 			curl_close($ch);
 		}else{
 
-			//return the transfer as a string
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+// 			//return the transfer as a string
+// 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 			// Set Request Type (GET, POST, PUT, DELETE)
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $req);
@@ -650,23 +650,23 @@ function get_routes($uri){
 // 			};
 // 			curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_cb);
 			
-			$callback = function ($ch, $str) use ($return_arr) {
-				// get Response Type From Couch
-				$cType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+// 			$callback = function ($ch, $str) use ($return_arr) {
+// 				// get Response Type From Couch
+// 				$cType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 				
-				if ($return_arr){
-					$output += $str;
-				}else{
-					echo $str;
-				}
+// 				if ($return_arr){
+// 					$output += $str;
+// 				}else{
+// 					echo $str;
+// 				}
 				
-				while (ob_get_level() > 0) {
-				    ob_end_flush();
-				}
-				    flush();
-				return strlen($str);//return the exact length
-			    };
-			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $callback);
+// 				while (ob_get_level() > 0) {
+// 				    ob_end_flush();
+// 				}
+// 				    flush();
+// 				return strlen($str);//return the exact length
+// 			    };
+// 			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $callback);
 			
 			// $output contains the output string
 			curl_exec($ch);
