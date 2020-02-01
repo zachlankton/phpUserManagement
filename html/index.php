@@ -643,11 +643,33 @@ function get_routes($uri){
 				'Content-Length: ' . strlen($json_string))                                                                       
 			);    
 			
+			$header_cb = function($ch, $str) {
+				// get Response Type From Couch
+				$cType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+				header('Content-Type: '.$cType);
+			}
+			curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_cb);
+			
+			$callback = function ($ch, $str) {
+				// get Response Type From Couch
+				$cType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+				
+				if ($return_arr){
+					$output += $str;
+				}else{
+					echo $str;
+				}
+				
+				while (ob_get_level() > 0) {
+				    ob_end_flush();
+				}
+				    flush();
+				return strlen($str);//return the exact length
+			    };
+			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $callback);
+			
 			// $output contains the output string
 			$output = curl_exec($ch);
-
-			// get Response Type From Couch
-			$cType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 
 			// close curl resource to free up system resources
 			curl_close($ch); 
@@ -655,11 +677,8 @@ function get_routes($uri){
 			// Set Content Type and Respond!
 			if ($return_arr){
 				return json_decode($output);
-			}else{
-				header('Content-Type: '.$cType);
-				echo $output;
-				die();
 			}
+			die();
 		}
 	}
 		    
