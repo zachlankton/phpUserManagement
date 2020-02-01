@@ -674,7 +674,6 @@ function get_routes($uri){
 			// Set Content Type and Respond!
 			if ($return_arr){
 				header('Content-Type: text/html');
-				var_dump($output);
 				return json_decode($output);
 			}
 			die();
