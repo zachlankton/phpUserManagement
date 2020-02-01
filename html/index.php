@@ -628,8 +628,8 @@ function get_routes($uri){
 			curl_close($ch);
 		}else{
 
-// 			//return the transfer as a string
-// 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			//return the transfer as a string
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
 
 			// Set Request Type (GET, POST, PUT, DELETE)
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $req);
@@ -641,32 +641,29 @@ function get_routes($uri){
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
 				'Content-Type: application/json',                                                                                
 				'Content-Length: ' . strlen($json_string))                                                                       
-			);    
+			);
 			
-// 			$header_cb = function($ch, $str) {
-// 				// get Response Type From Couch
-// 				$cType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-// 				header('Content-Type: '.$cType);
-// 			};
-// 			curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_cb);
+			curl_setopt($ch, CURLOPT_HEADER, false);
 			
-// 			$callback = function ($ch, $str) use ($return_arr) {
-// 				// get Response Type From Couch
-// 				$cType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+			$header_cb = function($ch, $str) {
+				$len = strlen($str);
+    				header( $str );
+				return $len;
+			};
+			curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_cb);
+			$output = "";
+			$write_cb = function ($ch, $str) use ($return_arr,$output) {
+				$len = strlen($str);
 				
-// 				if ($return_arr){
-// 					$output += $str;
-// 				}else{
-// 					echo $str;
-// 				}
+				if ($return_arr){
+					$output += $str;
+				}else{
+					echo( $str );
+				}
 				
-// 				while (ob_get_level() > 0) {
-// 				    ob_end_flush();
-// 				}
-// 				    flush();
-// 				return strlen($str);//return the exact length
-// 			    };
-// 			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $callback);
+				return $len;
+			};
+			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $write_cb);
 			
 			// $output contains the output string
 			curl_exec($ch);
