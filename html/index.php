@@ -656,7 +656,7 @@ function get_routes($uri){
 				$len = strlen($str);
 				
 				if ($return_arr){
-					$output += $str;
+					$output .= $str;
 				}else{
 					echo( $str );
 				}
