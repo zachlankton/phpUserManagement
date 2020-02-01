@@ -652,7 +652,7 @@ function get_routes($uri){
 			};
 			curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_cb);
 			$output = "";
-			$write_cb = function ($ch, $str) use ($return_arr,$output) {
+			$write_cb = function ($ch, $str) use ($return_arr, &$output) {
 				$len = strlen($str);
 				
 				if ($return_arr){
