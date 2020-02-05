@@ -607,7 +607,7 @@ function get_routes($uri){
 		$ch = curl_init();
 		
 		$port = "5984";
-		if (substr($uri, 0, 6) == "/_fti"){
+		if (substr($uri, 0, 5) == "/_fti"){
 			$uri = substr($uri, 5);
 			$port = "5985";
 		}
