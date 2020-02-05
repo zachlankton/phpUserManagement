@@ -607,7 +607,7 @@ function get_routes($uri){
 		$ch = curl_init();
 		
 		// set url
-		curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:5984/".$uri);
+		curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:5984".$uri);
 
 		if (strpos($uri, '/_changes') !== FALSE){
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
