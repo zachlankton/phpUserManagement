@@ -606,8 +606,14 @@ function get_routes($uri){
 		// create curl resource
 		$ch = curl_init();
 		
+		$port = "5984";
+		if (substr($uri, 0, 6) == "/_fti"){
+			$uri = substr($uri, 5);
+			$port = "5985";
+		}
+		
 		// set url
-		curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:5984".$uri);
+		curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:$port".$uri);
 
 		if (strpos($uri, '/_changes') !== FALSE){
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
