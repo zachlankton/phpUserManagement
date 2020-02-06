@@ -675,8 +675,9 @@ function get_routes($uri){
 			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $write_cb);
 			
 			// $output contains the output string
+			ob_start(null, 4096);
 			curl_exec($ch);
-
+			ob_end_flush();
 			// close curl resource to free up system resources
 			curl_close($ch); 
 
