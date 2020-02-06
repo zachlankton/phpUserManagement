@@ -607,15 +607,11 @@ function get_routes($uri){
 		$ch = curl_init();
 		
 		$port = "5984";
-		if (substr($uri, 0, 5) == "/_fti"){
-			$uri = substr($uri, 5);
-			$port = "5985";
-		}
 		
 		// set url
 		curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:$port".$uri);
 
-		if (strpos($uri, '/_changes') !== FALSE){
+		if (strpos($uri, '/_changes' && $_SERVER['HTTP_ACCEPT'] == 'text/event-stream') !== FALSE){
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
 				'Content-Type: text/event-stream'
 				)                                                                       
