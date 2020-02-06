@@ -685,7 +685,7 @@ function get_routes($uri){
 			if ($return_arr){
 				return json_decode($output);
 			}else{
-				echo $output;
+				echo json_encode(json_decode($output));
 			}
 			die();
 		}
