@@ -635,7 +635,7 @@ function get_routes($uri){
 		}else{
 
 			//return the transfer as a string
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
 
 			// Set Request Type (GET, POST, PUT, DELETE)
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $req);
@@ -651,32 +651,32 @@ function get_routes($uri){
 			
 			curl_setopt($ch, CURLOPT_HEADER, false);
 			
-// 			if (!$return_arr){
-// 				$header_cb = function($ch, $str) {
-// 					$len = strlen($str);
-// 					header( $str );
-// 					return $len;
-// 				};
-// 				curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_cb);
-// 			}
+			if (!$return_arr){
+				$header_cb = function($ch, $str) {
+					$len = strlen($str);
+					header( $str );
+					return $len;
+				};
+				curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_cb);
+			}
 				
-			//$output = "";
-// 			$write_cb = function ($ch, $str) use ($return_arr, &$output) {
-// 				$len = strlen($str);
+			$output = "";
+			$write_cb = function ($ch, $str) use ($return_arr, &$output) {
+				$len = strlen($str);
 				
-// 				if ($return_arr){
-// 					$output .= $str;
-// 				}else{
-// 					echo( $str );
-// 				}
+				if ($return_arr){
+					$output .= $str;
+				}else{
+					echo( $str );
+				}
 				
-// 				return $len;
-// 			};
-// 			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $write_cb);
+				return $len;
+			};
+			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $write_cb);
 			
 			// $output contains the output string
 
-			$output = curl_exec($ch);
+			curl_exec($ch);
 
 			// close curl resource to free up system resources
 			curl_close($ch); 
@@ -684,8 +684,6 @@ function get_routes($uri){
 			// Set Content Type and Respond!
 			if ($return_arr){
 				return json_decode($output);
-			}else{
-				echo json_encode(json_decode($output));
 			}
 			die();
 		}
