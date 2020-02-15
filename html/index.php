@@ -108,7 +108,7 @@
 
 	function stop(){
 		global $xDev;
-		$xDev.close();
+		$xDev->close();
 		die();
 	}
 
