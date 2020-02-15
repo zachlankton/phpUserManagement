@@ -360,9 +360,10 @@
 		/* Connection inside a try/catch block */
 		try
 		{  
-			// mysql xDevApi Sessions Connection
-		    	$xCli = mysql_xdevapi\getClient("mysqlx://{$user}:{$passwd}@localhost");
-			$xDev = $xCli->getSession();
+			// mysql xDevApi Sessions Connection Connection Pool CURRENTLY NOT WORKING!
+// 		    	$xCli = mysql_xdevapi\getClient("mysqlx://{$user}:{$passwd}@localhost");
+// 			$xDev = $xCli->getSession();
+			$xDev = mysql_xdevapi\getSession("mysqlx://{$user}:{$passwd}@localhost");
 		   
 			/* PDO object creation */
 		   $pdo = new PDO($dsn, $user,  $passwd, array(PDO::ATTR_PERSISTENT => true) );
