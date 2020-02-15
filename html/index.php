@@ -46,6 +46,7 @@
 	check_logout();
 
 	// mysql xDevApi Session Object
+	$xCli = NULL;
 	$xDev = NULL;
 
 	// global db connection object
@@ -64,7 +65,7 @@
 
 	if ($user_enabled == false){
 		echo "User is Disabled!";
-		die();
+		stop();
 	}
 
 	// Composer Autoload
@@ -91,7 +92,7 @@
 
 	admin_edit_icon();
 
-
+    stop();
 
 
 
@@ -105,6 +106,11 @@
 */
 
 
+	function stop(){
+		global $xDev;
+		$xDev.close();
+		die();
+	}
 
 	function super_user_routes_match(){
 		global $uri;
@@ -124,19 +130,19 @@
 		switch ($uri) {
 			case "/addUser":
 				require "../routes/adduser.php";
-				die();
+				stop();
 			case "/editUser":
 				require "../routes/editUser.php";
-				die();
+				stop();
 			case "/getUserByName":
 				require "../routes/getUserByName.php";
-				die();
+				stop();
 			case "/users":
 				require "../routes/users.php";
-				die();
+				stop();
 			case "/admin":
 				require "../routes/admin.php";
-				die();
+				stop();
 		}
 
 		// If there are no results then use $uri
@@ -216,7 +222,7 @@
 				':count'    => $match_count
 			);
 			$sth->execute( $values );
-			die();
+			stop();
 		}
 		
 	}
@@ -232,14 +238,14 @@
 		if ( substr($uri, 0, 6) == '/couch' ) {
 			$json_string = file_get_contents('php://input');
 			couch($uri.'?'.$query_str, $req_type, $json_string, false);
-			die();
+			stop();
 		} elseif ( substr($referer, 0, 28) == 'https://erp2.mmpmg.com/couch') {
 			$json_string = file_get_contents('php://input');
 			couch($uri.'?'.$query_str, $req_type, $json_string, false);
-			die();
+			stop();
 		} elseif ($uri == "/getuser") {
 			require "../routes/getuser.php";
-			die();
+			stop();
 		}
 	}
 
@@ -255,7 +261,7 @@
 			if ($user_is_super){
 				echo "<a href='/edit{$uri}'>Create Route</a>";
 			}
-			die();
+			stop();
 		}
 		
 		$route_file_name = str_replace("/", "_", $route_match);
@@ -310,6 +316,7 @@
 
 	function authenticate_session(){
 		
+		global $xCli;
 		global $xDev;
 		global $pdo;
 		global $user;
@@ -333,7 +340,7 @@
 		if ($user == "local_request" && 
 		    $_SERVER['REMOTE_ADDR'] != "142.44.147.12"){
 			echo "Login Failed!";
-			die();
+			stop();
 		}
 		
 		// if no user set then record requested URI and 
@@ -345,7 +352,7 @@
 				$_SESSION['requested_uri'] = "/";
 			}
 			header("Location: /login.html");
-			die();
+			stop();
 		}
 	
 		/* Connection inside a try/catch block */
@@ -364,7 +371,7 @@
 		catch (PDOException $e)
 		{
 			echo "Login Failed!";
-		   	die();
+		   	stop();
 		}
 		
 		$_SESSION['user'] = $_SESSION['user'] ?? $_POST['user'];
@@ -377,7 +384,7 @@
 			$req_uri = $_SESSION['requested_uri'];
 			unset( $_SESSION['requested_uri'] );
 			header("Location: " . $req_uri );
-			die();
+			stop();
 		}
 		
 	}
@@ -572,7 +579,7 @@ function get_routes($uri){
 			setcookie(session_name(),'',0,'/');
 			session_regenerate_id(true);
 			echo "Successfully Logged Out!  <br> <a href='/'>Login</a>";
-			die();
+			stop();
 		}
 	}
 
@@ -603,7 +610,7 @@ function get_routes($uri){
 		
 		// if this request is for adding an admin then do nothing
 		if (strpos($uri, "/couch/_node/couchdb@127.0.0.1/_config/admins/") !== FALSE){
-			die();
+			stop();
 		}
 		
 		// if this uri contains "/couch" then strip it for forward to couchdb server
@@ -689,7 +696,7 @@ function get_routes($uri){
 			if ($return_arr){
 				return json_decode($output);
 			}
-			die();
+			stop();
 		}
 	}
 		    
