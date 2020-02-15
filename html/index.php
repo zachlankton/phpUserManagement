@@ -360,7 +360,6 @@
 		{  
 			// mysql xDevApi Sessions Connection
 		    	$xCli = mysql_xdevapi\getClient("mysqlx://{$user}:{$passwd}@localhost");
-			$xCli.close();
 			$xDev = $xCli->getSession();
 		   
 			/* PDO object creation */
