@@ -45,6 +45,9 @@
 
 	check_logout();
 
+	// mysql xDevApi Session Object
+	$xDev = NULL;
+
 	// global db connection object
 	$pdo = NULL;
 	$user = "";
@@ -307,6 +310,7 @@
 
 	function authenticate_session(){
 		
+		global $xDev;
 		global $pdo;
 		global $user;
 		global $uri;
@@ -347,7 +351,11 @@
 		/* Connection inside a try/catch block */
 		try
 		{  
-		   /* PDO object creation */
+			// mysql xDevApi Sessions Connection
+		    	$xCli = mysql_xdevapi\getClient("mysqlx://{$user}:{$passwd}@localhost");
+			$xDev = $xCli->getSession();
+		   
+			/* PDO object creation */
 		   $pdo = new PDO($dsn, $user,  $passwd, array(PDO::ATTR_PERSISTENT => true) );
 
 		   /* Enable exceptions on errors */
