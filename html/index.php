@@ -630,13 +630,12 @@ function get_routes($uri){
 		curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:$port".$uri);
 		
 		if (strpos($uri, '/_changes') !== FALSE && $_SERVER['HTTP_ACCEPT'] == 'text/event-stream')){
+			die("made it!");
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-				'Accept: text/event-stream'
+				'Content-Type: text/event-stream'
 				)                                                                       
-			);
-			header("Cache-Control: no-cache");
-			header("Content-Type: text/event-stream");			
-			
+			);  
+			header("Content-Type: text/event-stream");
 			$callback = function ($ch, $str) {
 				echo $str;
 				while (ob_get_level() > 0) {
