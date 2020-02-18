@@ -631,10 +631,8 @@ function get_routes($uri){
 
 		if (strpos($uri, '/_changes' && $_SERVER['HTTP_ACCEPT'] == 'text/event-stream') !== FALSE){
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-				'Content-Type: text/event-stream'
+				'accept: text/event-stream'
 				)                                                                       
-			);  
-			header("Content-Type: text/event-stream");
 			
 			$header_cb = function($ch, $str) {
 				$len = strlen($str);
@@ -646,10 +644,10 @@ function get_routes($uri){
 			
 			$callback = function ($ch, $str) {
 				echo $str;
-				while (ob_get_level() > 0) {
-				    ob_end_flush();
-				}
-				    flush();
+// 				while (ob_get_level() > 0) {
+// 				    ob_end_flush();
+// 				}
+// 				    flush();
 				return strlen($str);//return the exact length
 			    };
 			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $callback);
