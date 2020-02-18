@@ -634,20 +634,24 @@ function get_routes($uri){
 				'accept: text/event-stream'
 				)                                                                       
 			);
-			$header_cb = function($ch, $str) {
-				$len = strlen($str);
-				header( $str );
-				return $len;
-			};
-			curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_cb);
+			
+			header("Cache-Control: no-cache");
+			header("Content-Type: text/event-stream");
+			
+// 			$header_cb = function($ch, $str) {
+// 				$len = strlen($str);
+// 				header( $str );
+// 				return $len;
+// 			};
+// 			curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_cb);
 			
 			
 			$callback = function ($ch, $str) {
 				echo $str;
-// 				while (ob_get_level() > 0) {
-// 				    ob_end_flush();
-// 				}
-// 				    flush();
+				while (ob_get_level() > 0) {
+				    ob_end_flush();
+				}
+				    flush();
 				return strlen($str);//return the exact length
 			    };
 			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $callback);
