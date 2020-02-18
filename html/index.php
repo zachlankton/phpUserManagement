@@ -628,14 +628,15 @@ function get_routes($uri){
 		
 		// set url
 		curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:$port".$uri);
-
+		var_dump($_SERVER);
+		die();
 		if (strpos($uri, '/_changes' && $_SERVER['HTTP_ACCEPT'] == 'text/event-stream') !== FALSE){
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
 				'Accept: text/event-stream',
 				'Connection: keep-alive'
 				)                                                                       
 			);
-			curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+// 			curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 			header("Cache-Control: no-cache");
 			header("Content-Type: text/event-stream");
 			
@@ -647,15 +648,15 @@ function get_routes($uri){
 // 			curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_cb);
 			
 			
-			$callback = function ($ch, $str) {
-				echo $str;
-				while (ob_get_level() > 0) {
-				    ob_end_flush();
-				}
-				    flush();
-				return strlen($str);//return the exact length
-			    };
-			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $callback);
+// 			$callback = function ($ch, $str) {
+// 				echo $str;
+// 				while (ob_get_level() > 0) {
+// 				    ob_end_flush();
+// 				}
+// 				    flush();
+// 				return strlen($str);//return the exact length
+// 			    };
+// 			curl_setopt($ch, CURLOPT_WRITEFUNCTION, $callback);
 			curl_exec($ch);
 			curl_close($ch);
 		}else{
