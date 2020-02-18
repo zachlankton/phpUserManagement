@@ -628,7 +628,7 @@ function get_routes($uri){
 		
 		// set url
 		curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:$port".$uri);
-
+		die("http://127.0.0.1:$port".$uri);
 		if (strpos($uri, '/_changes' && $_SERVER['HTTP_ACCEPT'] == 'text/event-stream') !== FALSE){
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
 				'Accept: text/event-stream',
