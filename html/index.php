@@ -631,10 +631,11 @@ function get_routes($uri){
 
 		if (strpos($uri, '/_changes' && $_SERVER['HTTP_ACCEPT'] == 'text/event-stream') !== FALSE){
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-				'accept: text/event-stream'
+				'Accept: text/event-stream',
+				'Connection: keep-alive'
 				)                                                                       
 			);
-			
+			curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 			header("Cache-Control: no-cache");
 			header("Content-Type: text/event-stream");
 			
