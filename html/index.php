@@ -635,10 +635,10 @@ function get_routes($uri){
 				'Connection: keep-alive'
 				)                                                                       
 			);
-// 			curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 			header("Cache-Control: no-cache");
 			header("Content-Type: text/event-stream");
-			
+			echo "data: \n test \n\n";
+			die();
 // 			$header_cb = function($ch, $str) {
 // 				$len = strlen($str);
 // 				header( $str );
