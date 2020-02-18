@@ -633,7 +633,7 @@ function get_routes($uri){
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
 				'accept: text/event-stream'
 				)                                                                       
-			
+			);
 			$header_cb = function($ch, $str) {
 				$len = strlen($str);
 				header( $str );
