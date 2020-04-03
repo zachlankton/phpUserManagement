@@ -664,16 +664,16 @@ function get_routes($uri){
 				'Content-Length: ' . strlen($json_string))                                                                       
 			);
 			
-			//curl_setopt($ch, CURLOPT_HEADER, false);
+			curl_setopt($ch, CURLOPT_HEADER, false);
 			
-// 			if (!$return_arr){
-// 				$header_cb = function($ch, $str) {
-// 					$len = strlen($str);
-// 					header( $str );
-// 					return $len;
-// 				};
-// 				curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_cb);
-// 			}
+			if (!$return_arr){
+				$header_cb = function($ch, $str) {
+					$len = strlen($str);
+					header( $str );
+					return $len;
+				};
+				curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_cb);
+			}
 				
 			$output = "";
 			$write_cb = function ($ch, $str) use ($return_arr, &$output) {
