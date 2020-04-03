@@ -664,7 +664,7 @@ function get_routes($uri){
 				'Content-Length: ' . strlen($json_string))                                                                       
 			);
 			
-			curl_setopt($ch, CURLOPT_HEADER, false);
+			//curl_setopt($ch, CURLOPT_HEADER, false);
 			
 // 			if (!$return_arr){
 // 				$header_cb = function($ch, $str) {
