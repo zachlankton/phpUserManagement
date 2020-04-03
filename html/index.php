@@ -660,7 +660,7 @@ function get_routes($uri){
 
 			// Set Content Type and Length
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-				'Content-Type: application/pdf',                                                                                
+				//'Content-Type: application/pdf',                                                                                
 				'Content-Length: ' . strlen($json_string))                                                                       
 			);
 			
