@@ -659,6 +659,9 @@ function get_routes($uri){
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string); 
 
 			// Set Content Type and Length
+			// need to set this to application/json for most requests
+			// however when uploading files in fauxton, like a PDF
+			// it is necessary to get the Request Content Type...
 			$cType = $_SERVER["CONTENT_TYPE"] ?? "application/json";
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
 				'Content-Type: ' . $cType,                                                                                
