@@ -659,8 +659,9 @@ function get_routes($uri){
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string); 
 
 			// Set Content Type and Length
+			$cType = $_SERVER["CONTENT_TYPE"] ?? "application/json";
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-				//'Content-Type: application/pdf',                                                                                
+				'Content-Type: ' . $cType,                                                                                
 				'Content-Length: ' . strlen($json_string))                                                                       
 			);
 			
