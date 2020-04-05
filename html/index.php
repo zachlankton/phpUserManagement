@@ -371,7 +371,7 @@
 		   /* Enable exceptions on errors */
 		   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		}
-		catch (PDOException $e)
+		catch (Exception $e)
 		{
 			echo "Login Failed!";
 		   	die();
