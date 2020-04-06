@@ -64,8 +64,8 @@
 	session_write_close();
 
 	if ($user_enabled == false){
-		echo "User is Disabled!";
-		die();
+		echo "<h1>User is Disabled!</h1>";
+		logout();
 	}
 
 	// Composer Autoload
@@ -577,13 +577,17 @@ function get_routes($uri){
 		
 		// IF USER IS AUTHENTICATED AND REQUESTING LOGOUT
 		if ($uri == '/logout'){
-			$_SESSION = array();
-			session_destroy();
-			setcookie(session_name(),'',0,'/');
-			session_regenerate_id(true);
-			echo "Successfully Logged Out!  <br> <a href='/'>Login</a>";
-			die();
+			logout();
 		}
+	}
+
+	function logout() {
+		$_SESSION = array();
+		session_destroy();
+		setcookie(session_name(),'',0,'/');
+		session_regenerate_id(true);
+		echo "Successfully Logged Out!  <br> <a href='/'>Login</a>";
+		die();
 	}
 
 	function admin_edit_icon(){
