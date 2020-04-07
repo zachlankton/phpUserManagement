@@ -364,7 +364,10 @@
 // 		    	$xCli = mysql_xdevapi\getClient("mysqlx://{$user}:{$passwd}@localhost");
 // 			$xDev = $xCli->getSession();
 			$xDev = mysql_xdevapi\getSession("mysqlx://{$user}:{$passwd}@localhost");
-		   
+			
+		        // Turn on the users roles for xDev... not sure why pdo works without this but xDev doesnt
+			$xDev->sql("SET ROLE ALL")->execute();
+			
 			/* PDO object creation */
 		   $pdo = new PDO($dsn, $user,  $passwd, array(PDO::ATTR_PERSISTENT => true) );
 
