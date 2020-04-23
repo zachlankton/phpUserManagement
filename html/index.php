@@ -1,5 +1,8 @@
 <?php
 
+use Nesk\Puphpeteer\Puppeteer;
+use Nesk\Rialto\Data\JsFunction;
+
 	/*
 		===================================
 		The purpose of this file is to require any requests that are not
@@ -274,9 +277,6 @@
 			$prince = new Prince('/usr/bin/prince');
 			$prince->setJavaScript(TRUE);
 			$prince->setHTML(TRUE);
-			
-			use Nesk\Puphpeteer\Puppeteer;
-			use Nesk\Rialto\Data\JsFunction;
 			
 			$puppet = new Puppeteer;
 			$browser = $puppeteer->launch();
