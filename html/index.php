@@ -278,45 +278,48 @@
 		$route_file_name = str_replace(".*", ".", $route_file_name);
 		
 		if (isset($_GET['getPDF'])){
-			
-			require("prince.php");
-			$prince = new Prince('/usr/bin/prince');
-			$prince->setJavaScript(TRUE);
-			$prince->setHTML(TRUE);
-			
-			$uri = $_SERVER["REQUEST_URI"];
-			$uri = str_replace("getPDF", "", $uri);
-			
-			$puppet = new Puppeteer;
-			$browser = $puppet->launch();
-			$page = $browser->newPage();			
-			$page->setCookie( ["name"=>"user", "value"=>$_SESSION['user'], "domain"=>"erp2.mmpmg.com" ] );
-			$page->setCookie( ["name"=>"pw", "value"=>$_SESSION['pw'], "domain"=>"erp2.mmpmg.com" ] );
-			$page->goto("https://erp2.mmpmg.com" . $uri, ["waitUntil"=>"networkidle2"]);
-			$html = $page->evaluate(JsFunction::createWithBody("
-			    document.querySelectorAll('script').forEach(function(n){n.remove()});
-			    return document.documentElement.outerHTML;
-			"));
-			$browser->close();
-			
-			header('Content-Type: application/pdf');
-			
-			$errmsgs = [];
-			$temp = tempnam("/var/www/files/tmp", "prince-pdf-gen-");
-			$r = $prince->convert_string_to_file($html, $temp);
-			$str = file_get_contents($temp);
-			$str = preg_replace('/(\/CS \/DeviceRGB>>\n\/Annots[\s\S]*?)(stream[\s\S]*?endstream)/i', '$1', $str);
-			file_put_contents($temp, $str);
-			readFile($temp);
-			die();
+			generatePDF();
 		}else{
 			require("/var/www/routes/app_routes/$route_file_name");
 		}
 		
 	}
 
-	function buffer_out_to_prince($buffer){
-		$GLOBALS['prince_pdf_output'] .= $buffer;
+	function generatePDF(){
+		require("prince.php");
+		$prince = new Prince('/usr/bin/prince');
+		$prince->setJavaScript(TRUE);
+		$prince->setHTML(TRUE);
+
+		$uri = $_SERVER["REQUEST_URI"];
+		$uri = str_replace("getPDF", "", $uri);
+
+		$puppet = new Puppeteer;
+		$browser = $puppet->launch();
+		$page = $browser->newPage();			
+		$page->setCookie( ["name"=>"user", "value"=>$_SESSION['user'], "domain"=>"erp2.mmpmg.com" ] );
+		$page->setCookie( ["name"=>"pw", "value"=>$_SESSION['pw'], "domain"=>"erp2.mmpmg.com" ] );
+		$page->goto("https://erp2.mmpmg.com" . $uri, ["waitUntil"=>"networkidle2"]);
+		$html = $page->evaluate(JsFunction::createWithBody("
+		
+			//remove all the scripts so prince does not try to run them again
+		    document.querySelectorAll('script').forEach(function(n){n.remove()});
+		    
+		    // return rendered html page to be used for prince pdf
+		    return document.documentElement.outerHTML;
+		"));
+		$browser->close();
+
+		header('Content-Type: application/pdf');
+
+		$errmsgs = [];
+		$temp = tempnam("/var/www/files/tmp", "prince-pdf-gen-");
+		$r = $prince->convert_string_to_file($html, $temp);
+		$str = file_get_contents($temp);
+		$str = preg_replace('/(\/CS \/DeviceRGB>>\n\/Annots[\s\S]*?)(stream[\s\S]*?endstream)/i', '$1', $str);
+		file_put_contents($temp, $str);
+		readFile($temp);
+		die();
 	}
 
 	function get_route_vars(){
