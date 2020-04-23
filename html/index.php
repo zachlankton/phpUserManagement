@@ -278,26 +278,27 @@ use Nesk\Rialto\Data\JsFunction;
 			$prince->setJavaScript(TRUE);
 			$prince->setHTML(TRUE);
 			
-			$puppet = new Puppeteer;
-			$browser = $puppet->launch();
-			$page = $browser->newPage();
-			$page->goto('https://google.com', array("waitUntil"=>"networkidle2"));
-			// Get the "viewport" of the page, as reported by the page.
-			$html = $page->evaluate(JsFunction::createWithBody("
-			    return document.documentElement.outerHTML;
-			"));
-			echo $html;
-			$browser->close();
-			die();
 			
 			$GLOBALS['prince_pdf_output'] = "";
 			ob_start('buffer_out_to_prince');
 			require("/var/www/routes/app_routes/$route_file_name");
 			ob_end_flush();
 			
-			
-			//header('Content-Type: application/pdf');
 			$data = $GLOBALS['prince_pdf_output'];
+			
+			$puppet = new Puppeteer;
+			$browser = $puppet->launch();
+			$page = $browser->newPage();
+			$page->setContent($data, array("waitUntil"=>"networkidle2"));
+			
+			$html = $page->evaluate(JsFunction::createWithBody("
+			    return document.documentElement.outerHTML;
+			"));
+			echo $html;
+			$browser->close();
+			die();
+			//header('Content-Type: application/pdf');
+			
 			$errmsgs = [];
 			//$r = $prince->convert_string_to_passthru($data);
 			$r = $prince->convert_string_to_file($data, '/var/www/files/test.pdf', $errmsgs);
