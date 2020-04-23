@@ -285,7 +285,7 @@
 	}
 
 	function buffer_out_to_prince($buffer){
-		$GLOBALS['prince_pdf_output] .= $buffer;
+		$GLOBALS['prince_pdf_output'] .= $buffer;
 	}
 
 	function get_route_vars(){
