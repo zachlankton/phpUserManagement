@@ -319,6 +319,7 @@
 		$str = preg_replace('/(\/Annots[\s\S]*?)(stream[\s\S]*?endstream)/i', '$1', $str);
 		file_put_contents($temp, $str);
 		readFile($temp);
+		unlink($temp);
 		die();
 	}
 
