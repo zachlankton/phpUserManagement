@@ -294,10 +294,12 @@ use Nesk\Rialto\Data\JsFunction;
 			$page->waitFor(10000);
 			$html = $page->evaluate(JsFunction::createWithBody("
 			    //document.querySelectorAll('script').forEach(function(n){n.remove()});
+			    return dData.customerQuotes;
 			    return document.documentElement.outerHTML;
 			    
 			"));
-			echo $html;
+			var_dump($html);
+			//echo $html;
 			$browser->close();
 			die();
 			//header('Content-Type: application/pdf');
