@@ -289,7 +289,7 @@ use Nesk\Rialto\Data\JsFunction;
 			$puppet = new Puppeteer;
 			$browser = $puppet->launch();
 			$page = $browser->newPage();			
-			$page->setCookie( ["name"=>"user", "value"=>$user, "domain"=>"erp2.mmpmg.com" ] );
+			$page->setCookie( ["name"=>"user", "value"=>$_SESSION['user'], "domain"=>"erp2.mmpmg.com" ] );
 			$page->setCookie( ["name"=>"pw", "value"=>$_SESSION['pw'], "domain"=>"erp2.mmpmg.com" ] );
 			$page->goto("https://erp2.mmpmg.com" . $uri, ["waitUntil"=>"networkidle2"]);
 			//$page->waitFor(10000);
