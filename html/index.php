@@ -316,7 +316,7 @@
 		$temp = tempnam("/var/www/files/tmp", "prince-pdf-gen-");
 		$r = $prince->convert_string_to_file($html, $temp);
 		$str = file_get_contents($temp);
-		$str = preg_replace('/(\/CS \/DeviceRGB>>\n\/Annots[\s\S]*?)(stream[\s\S]*?endstream)/i', '$1', $str);
+		$str = preg_replace('/(\/Annots[\s\S]*?)(stream[\s\S]*?endstream)/i', '$1', $str);
 		file_put_contents($temp, $str);
 		readFile($temp);
 		die();
