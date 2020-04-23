@@ -38,8 +38,8 @@
 	// load chrome headless browser to parse page before
 	// sending to prince pdf
 	
-// 	use Nesk\Puphpeteer\Puppeteer;
-// 	use Nesk\Rialto\Data\JsFunction;
+	use Nesk\Puphpeteer\Puppeteer;
+	use Nesk\Rialto\Data\JsFunction;
 	
 
 	// START SESSION
@@ -276,6 +276,7 @@
 		
 		$route_file_name = str_replace("/", "_", $route_match);
 		$route_file_name = str_replace(".*", ".", $route_file_name);
+		
 		if (isset($_GET['getPDF'])){
 			
 			require("prince.php");
@@ -289,22 +290,17 @@
 			$page->setCookie( ["name"=>"user", "value"=>$_SESSION['user'], "domain"=>"erp2.mmpmg.com" ] );
 			$page->setCookie( ["name"=>"pw", "value"=>$_SESSION['pw'], "domain"=>"erp2.mmpmg.com" ] );
 			$page->goto("https://erp2.mmpmg.com" . $uri, ["waitUntil"=>"networkidle2"]);
-			//$page->waitFor(10000);
 			$html = $page->evaluate(JsFunction::createWithBody("
 			    document.querySelectorAll('script').forEach(function(n){n.remove()});
 			    return document.documentElement.outerHTML;
 			"));
 
-			echo $html;
 			$browser->close();
-			die();
-			//header('Content-Type: application/pdf');
+			
+			header('Content-Type: application/pdf');
 			
 			$errmsgs = [];
-			//$r = $prince->convert_string_to_passthru($data);
-			$r = $prince->convert_string_to_file($data, '/var/www/files/test.pdf', $errmsgs);
-			echo $GLOBALS['prince_pdf_output'];
-			var_dump($errmsgs);
+			$r = $prince->convert_string_to_passthru($html);
 			die();
 		}else{
 			require("/var/www/routes/app_routes/$route_file_name");
