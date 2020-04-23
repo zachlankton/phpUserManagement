@@ -280,7 +280,9 @@
 			ob_end_flush();
 			header('Content-Type: application/pdf');
 			$data = $GLOBALS['prince_pdf_output'];
-			$r = $prince->convert_string_to_passthru($data);
+			//$r = $prince->convert_string_to_passthru($data);
+			$r = $prince->convert_string_to_file($data, '/var/www/files/test.pdf', &$msgs = array());
+			var_dump($msgs);
 			die();
 		}else{
 			require("/var/www/routes/app_routes/$route_file_name");
