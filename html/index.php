@@ -289,7 +289,7 @@ use Nesk\Rialto\Data\JsFunction;
 			$puppet = new Puppeteer;
 			$browser = $puppet->launch();
 			$page = $browser->newPage();
-			$page->goto("http://erp2.mmpmg.com" . $uri);
+			$page->goto("http://erp2.mmpmg.com" . $uri, array("waitUntil"=>"networkidle0"));
 			
 			$html = $page->evaluate(JsFunction::createWithBody("
 			    return document.documentElement.outerHTML;
