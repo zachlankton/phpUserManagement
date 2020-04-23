@@ -284,6 +284,9 @@
 			$prince->setJavaScript(TRUE);
 			$prince->setHTML(TRUE);
 			
+			$uri = $_SERVER["REQUEST_URI"];
+			$uri = str_replace("getPDF", "", $uri);
+			
 			$puppet = new Puppeteer;
 			$browser = $puppet->launch();
 			$page = $browser->newPage();			
