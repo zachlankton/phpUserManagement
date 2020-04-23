@@ -271,6 +271,9 @@
 		if (isset($_GET['getPDF'])){
 			require("prince.php");
 			$prince = new Prince('/usr/bin/prince');
+			$prince->setJavaScript(true);
+			$prince->setHTML(true);
+			
 			$GLOBALS['prince_pdf_output'] = "";
 			ob_start('buffer_out_to_prince');
 			require("/var/www/routes/app_routes/$route_file_name");
