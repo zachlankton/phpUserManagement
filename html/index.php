@@ -279,7 +279,7 @@ use Nesk\Rialto\Data\JsFunction;
 			$prince->setHTML(TRUE);
 			
 			$puppet = new Puppeteer;
-			$browser = $puppeteer->launch();
+			$browser = $puppet->launch();
 			$page = $browser->newPage();
 			$page->goto('https://google.com', array("waitUntil"=>"networkidle2"));
 			// Get the "viewport" of the page, as reported by the page.
