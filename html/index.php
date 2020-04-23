@@ -278,7 +278,7 @@
 			ob_start('buffer_out_to_prince');
 			require("/var/www/routes/app_routes/$route_file_name");
 			ob_end_flush();
-			header('Content-Type: application/pdf');
+			//header('Content-Type: application/pdf');
 			$data = $GLOBALS['prince_pdf_output'];
 			$errmsgs = [];
 			//$r = $prince->convert_string_to_passthru($data);
