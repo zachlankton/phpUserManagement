@@ -291,7 +291,7 @@ use Nesk\Rialto\Data\JsFunction;
 			$page = $browser->newPage();			
 			//$page->setCookie( ["name"=>"PHPSESSID", "value"=>session_id(), "domain"=>"erp2.mmpmg.com" ] );
 			$page->goto("http://erp2.mmpmg.com" . $uri);
-			$page->waitFor(10000);
+			//$page->waitFor(10000);
 			$html = $page->evaluate(JsFunction::createWithBody("
 			    document.querySelectorAll('script').forEach(function(n){n.remove()});
 			    setTimeout(function(){ return document.documentElement.outerHTML; }, 5000);
