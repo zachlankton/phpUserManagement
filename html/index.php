@@ -297,13 +297,17 @@
 			    document.querySelectorAll('script').forEach(function(n){n.remove()});
 			    return document.documentElement.outerHTML;
 			"));
-
 			$browser->close();
 			
 			header('Content-Type: application/pdf');
 			
 			$errmsgs = [];
-			$r = $prince->convert_string_to_passthru($html);
+			$temp = tmpnam("/var/www/files/tmp", "prince-pdf-gen-");
+			$r = $prince->convert_string_to_file($html, $temp);
+			$str = file_get_contents("test.pdf");
+			$str = preg_replace('/(\/CS \/DeviceRGB>>\n\/Annots[\s\S]*?)(stream[\s\S]*?endstream)/i', '$1', $str);
+			file_put_contents("test.pdf", $str);
+			readFile($temp);
 			die();
 		}else{
 			require("/var/www/routes/app_routes/$route_file_name");
