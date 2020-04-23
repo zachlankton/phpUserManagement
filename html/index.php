@@ -270,7 +270,7 @@
 		$route_file_name = str_replace(".*", ".", $route_file_name);
 		if (isset($_GET['getPDF'])){
 			require("prince.php");
-			$prince = new Prince('/usr/bin/prince);
+			$prince = new Prince('/usr/bin/prince');
 			ob_start('buffer_out_to_prince');
 			require("/var/www/routes/app_routes/$route_file_name");
 			ob_end_flush();
