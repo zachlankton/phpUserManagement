@@ -283,6 +283,7 @@
 			$errmsgs = [];
 			//$r = $prince->convert_string_to_passthru($data);
 			$r = $prince->convert_string_to_file($data, '/var/www/files/test.pdf', $errmsgs);
+			echo $GLOBAL['prince_pdf_output'];
 			var_dump($errmsgs);
 			die();
 		}else{
