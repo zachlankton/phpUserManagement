@@ -289,7 +289,8 @@ use Nesk\Rialto\Data\JsFunction;
 			$puppet = new Puppeteer;
 			$browser = $puppet->launch();
 			$page = $browser->newPage();			
-			$page->setCookie( ["name"=>"PHPSESSID", "value"=>session_id(), "domain"=>"https://erp2.mmpmg.com" ] );
+			$page->setCookie( ["name"=>"user", "value"=>$user, "domain"=>"erp2.mmpmg.com" ] );
+			$page->setCookie( ["name"=>"pw", "value"=>$_SESSION['pw'], "domain"=>"erp2.mmpmg.com" ] );
 			$page->goto("https://erp2.mmpmg.com" . $uri, ["waitUntil"=>"networkidle2"]);
 			//$page->waitFor(10000);
 			$html = $page->evaluate(JsFunction::createWithBody("
@@ -374,8 +375,8 @@ use Nesk\Rialto\Data\JsFunction;
 		global $uri;
 		
 		if ($_SERVER['REMOTE_ADDR'] == "142.44.147.12"){
-			$_SESSION['user'] = "local_request";
-			$_SESSION['pw'] = "";
+			$_SESSION['user'] = $_COOKIE['user'] ?? "local_request";
+			$_SESSION['pw'] = $_COOKIE['pw'] ?? "";
 		}
 		
 		/* MySQL account username */
