@@ -284,7 +284,7 @@ use Nesk\Rialto\Data\JsFunction;
 // 			require("/var/www/routes/app_routes/$route_file_name");
 // 			ob_end_flush();
 			
-			$data = $GLOBALS['prince_pdf_output'];
+// 			$data = $GLOBALS['prince_pdf_output'];
 			
 			$puppet = new Puppeteer;
 			$browser = $puppet->launch();
