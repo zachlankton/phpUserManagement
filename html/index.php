@@ -311,19 +311,11 @@
 		$browser->close();
 
 		header('Content-Type: application/pdf');
-
-		echo "test";
-		die();
-		//$temp = tempnam("/var/www/files/tmp", "prince-pdf-gen-");
+		
 		ob_start();
 		$r = $prince->convert_string_to_passthru($html);
-		
-		//$str = file_get_contents($temp);
 		$str = preg_replace('/(\/Annots[\s\S]*?)(stream[\s\S]*?endstream)/i', '$1', ob_get_clean());
 		echo $str;
-		//file_put_contents($temp, $str);
-		//readFile($temp);
-		//unlink($temp);
 		die();
 	}
 
