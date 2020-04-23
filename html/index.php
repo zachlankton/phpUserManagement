@@ -275,6 +275,9 @@
 			$prince->setJavaScript(TRUE);
 			$prince->setHTML(TRUE);
 			
+			use Nesk\Puphpeteer\Puppeteer;
+			use Nesk\Rialto\Data\JsFunction;
+			
 			$puppet = new Puppeteer;
 			$browser = $puppeteer->launch();
 			$page = $browser->newPage();
