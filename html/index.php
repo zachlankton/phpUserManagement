@@ -289,7 +289,7 @@ use Nesk\Rialto\Data\JsFunction;
 			$puppet = new Puppeteer;
 			$browser = $puppet->launch();
 			$page = $browser->newPage();
-			$page->setContent($data, array("waitUntil"=>"networkidle2"));
+			$page->setContent($data);
 			
 			$html = $page->evaluate(JsFunction::createWithBody("
 			    return document.documentElement.outerHTML;
