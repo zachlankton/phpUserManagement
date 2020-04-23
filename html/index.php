@@ -269,15 +269,34 @@
 		$route_file_name = str_replace("/", "_", $route_match);
 		$route_file_name = str_replace(".*", ".", $route_file_name);
 		if (isset($_GET['getPDF'])){
+			
 			require("prince.php");
 			$prince = new Prince('/usr/bin/prince');
 			$prince->setJavaScript(TRUE);
 			$prince->setHTML(TRUE);
 			
+			$puppet = new Puppeteer;
+			$browser = $puppeteer->launch();
+			$page = $browser->newPage();
+			$page->goto('https://google.com', array("waitUntil"=>"networkidle2"));
+			// Get the "viewport" of the page, as reported by the page.
+			$dimensions = $page->evaluate(JsFunction::createWithBody("
+			    return {
+				width: document.documentElement.clientWidth,
+				height: document.documentElement.clientHeight,
+				deviceScaleFactor: window.devicePixelRatio
+			    };
+			"));
+			printf('Dimensions: %s', print_r($dimensions, true));
+			$browser->close();
+			die();
+			
 			$GLOBALS['prince_pdf_output'] = "";
 			ob_start('buffer_out_to_prince');
 			require("/var/www/routes/app_routes/$route_file_name");
 			ob_end_flush();
+			
+			
 			//header('Content-Type: application/pdf');
 			$data = $GLOBALS['prince_pdf_output'];
 			$errmsgs = [];
