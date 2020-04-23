@@ -279,17 +279,17 @@ use Nesk\Rialto\Data\JsFunction;
 			$prince->setHTML(TRUE);
 			
 			
-			$GLOBALS['prince_pdf_output'] = "";
-			ob_start('buffer_out_to_prince');
-			require("/var/www/routes/app_routes/$route_file_name");
-			ob_end_flush();
+// 			$GLOBALS['prince_pdf_output'] = "";
+// 			ob_start('buffer_out_to_prince');
+// 			require("/var/www/routes/app_routes/$route_file_name");
+// 			ob_end_flush();
 			
 			$data = $GLOBALS['prince_pdf_output'];
 			
 			$puppet = new Puppeteer;
 			$browser = $puppet->launch();
 			$page = $browser->newPage();
-			$page->setContent($data);
+			$page->goto("http://erp2.mmpmg.com" . $uri);
 			
 			$html = $page->evaluate(JsFunction::createWithBody("
 			    return document.documentElement.outerHTML;
