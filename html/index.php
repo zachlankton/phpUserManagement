@@ -283,14 +283,10 @@ use Nesk\Rialto\Data\JsFunction;
 			$page = $browser->newPage();
 			$page->goto('https://google.com', array("waitUntil"=>"networkidle2"));
 			// Get the "viewport" of the page, as reported by the page.
-			$dimensions = $page->evaluate(JsFunction::createWithBody("
-			    return {
-				width: document.documentElement.clientWidth,
-				height: document.documentElement.clientHeight,
-				deviceScaleFactor: window.devicePixelRatio
-			    };
+			$html = $page->evaluate(JsFunction::createWithBody("
+			    return document.documentElement.outerHTML;
 			"));
-			printf('Dimensions: %s', print_r($dimensions, true));
+			echo $html;
 			$browser->close();
 			die();
 			
