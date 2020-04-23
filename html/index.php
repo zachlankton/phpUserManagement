@@ -268,7 +268,24 @@
 		
 		$route_file_name = str_replace("/", "_", $route_match);
 		$route_file_name = str_replace(".*", ".", $route_file_name);
-		require("/var/www/routes/app_routes/$route_file_name");
+		if (isset($_GET['getPDF'])){
+			require("prince.php");
+			$prince = new Prince('/usr/bin/prince);
+			ob_start('buffer_out_to_prince');
+			require("/var/www/routes/app_routes/$route_file_name");
+			ob_end_flush();
+			header('Content-Type: application/pdf');
+			$data = $GLOBALS['prince_pdf_output'];
+			$r = $prince->convert_string_to_passthru($data);
+			die();
+		}else{
+			require("/var/www/routes/app_routes/$route_file_name");
+		}
+		
+	}
+
+	function buffer_out_to_prince($buffer){
+		$GLOBALS['prince_pdf_output] .= $buffer;
 	}
 
 	function get_route_vars(){
