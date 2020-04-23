@@ -292,7 +292,7 @@ use Nesk\Rialto\Data\JsFunction;
 			$page->goto("http://erp2.mmpmg.com" . $uri, array("waitUntil"=>"networkidle2"));
 			
 			$html = $page->evaluate(JsFunction::createWithBody("
-			    document.querySelectorAll("script").forEach(function(n){n.remove()});
+			    document.querySelectorAll('script').forEach(function(n){n.remove()});
 			    return document.documentElement.outerHTML;
 			"));
 			echo $html;
