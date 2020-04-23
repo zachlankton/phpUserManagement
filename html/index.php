@@ -302,7 +302,7 @@
 			header('Content-Type: application/pdf');
 			
 			$errmsgs = [];
-			$temp = tmpnam("/var/www/files/tmp", "prince-pdf-gen-");
+			$temp = tempnam("/var/www/files/tmp", "prince-pdf-gen-");
 			$r = $prince->convert_string_to_file($html, $temp);
 			$str = file_get_contents("test.pdf");
 			$str = preg_replace('/(\/CS \/DeviceRGB>>\n\/Annots[\s\S]*?)(stream[\s\S]*?endstream)/i', '$1', $str);
