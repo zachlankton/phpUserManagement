@@ -312,7 +312,8 @@
 
 		header('Content-Type: application/pdf');
 
-		
+		echo "test";
+		die();
 		//$temp = tempnam("/var/www/files/tmp", "prince-pdf-gen-");
 		ob_start();
 		$r = $prince->convert_string_to_passthru($html);
