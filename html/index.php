@@ -37,10 +37,10 @@
 
 	// load chrome headless browser to parse page before
 	// sending to prince pdf
-	if (isset($_GET['getPDF'])){
-		use Nesk\Puphpeteer\Puppeteer;
-		use Nesk\Rialto\Data\JsFunction;
-	}
+	
+// 	use Nesk\Puphpeteer\Puppeteer;
+// 	use Nesk\Rialto\Data\JsFunction;
+	
 
 	// START SESSION
 	session_start();
