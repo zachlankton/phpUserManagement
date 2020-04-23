@@ -288,15 +288,14 @@ use Nesk\Rialto\Data\JsFunction;
 			
 			$puppet = new Puppeteer;
 			$browser = $puppet->launch();
-			$page = $browser->newPage();
-			echo session_id();
-			die();
+			$page = $browser->newPage();			
 			$page->setCookie( ["name"=>"PHPSESSID", "value"=>session_id() ] );
-			$page->goto("http://erp2.mmpmg.com" . $uri, array("waitUntil"=>"networkidle2"));
-			
+			$page->goto("http://erp2.mmpmg.com" . $uri);
+			$page->waitFor(10000);
 			$html = $page->evaluate(JsFunction::createWithBody("
 			    document.querySelectorAll('script').forEach(function(n){n.remove()});
-			    return document.documentElement.outerHTML;
+			    setTimeout(function(){ return document.documentElement.outerHTML; }, 5000);
+			    
 			"));
 			echo $html;
 			$browser->close();
