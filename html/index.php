@@ -1,7 +1,5 @@
 <?php
 
-use Nesk\Puphpeteer\Puppeteer;
-use Nesk\Rialto\Data\JsFunction;
 
 	/*
 		===================================
@@ -36,6 +34,13 @@ use Nesk\Rialto\Data\JsFunction;
 		=====OR=====
 		It will forward the user to the login page.
 	*/
+
+	// load chrome headless browser to parse page before
+	// sending to prince pdf
+	if (isset($_GET['getPDF')){
+		use Nesk\Puphpeteer\Puppeteer;
+		use Nesk\Rialto\Data\JsFunction;
+	}
 
 	// START SESSION
 	session_start();
@@ -277,14 +282,6 @@ use Nesk\Rialto\Data\JsFunction;
 			$prince = new Prince('/usr/bin/prince');
 			$prince->setJavaScript(TRUE);
 			$prince->setHTML(TRUE);
-			
-			
-// 			$GLOBALS['prince_pdf_output'] = "";
-// 			ob_start('buffer_out_to_prince');
-// 			require("/var/www/routes/app_routes/$route_file_name");
-// 			ob_end_flush();
-			
-// 			$data = $GLOBALS['prince_pdf_output'];
 			
 			$puppet = new Puppeteer;
 			$browser = $puppet->launch();
